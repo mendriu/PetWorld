@@ -16,13 +16,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddInfrastructure(connectionString);
 
-// Add AI services
-var openAiApiKey = builder.Configuration["OpenAI:ApiKey"]
-    ?? throw new InvalidOperationException("OpenAI API key not found.");
+// Add AI services (optional - only if API key is configured)
+var openAiApiKey = builder.Configuration["OpenAI:ApiKey"];
 builder.Services.AddAI(openAiApiKey);
 
-// Add Application services
-builder.Services.AddScoped<IChatService, ChatService>();
+// Add Application services (only if AI is configured)
+if (!string.IsNullOrWhiteSpace(openAiApiKey))
+{
+    builder.Services.AddScoped<IChatService, ChatService>();
+}
 
 var app = builder.Build();
 

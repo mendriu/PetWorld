@@ -9,17 +9,20 @@ namespace PetWorld.AI;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAI(this IServiceCollection services, string openAiApiKey)
+    public static IServiceCollection AddAI(this IServiceCollection services, string? openAiApiKey)
     {
-        services.AddSingleton(_ =>
+        if (!string.IsNullOrWhiteSpace(openAiApiKey))
         {
-            var client = new OpenAIClient(openAiApiKey);
-            return client.GetChatClient("gpt-4o");
-        });
+            services.AddSingleton(_ =>
+            {
+                var client = new OpenAIClient(openAiApiKey);
+                return client.GetChatClient("gpt-4o");
+            });
 
-        services.AddScoped<WriterAgent>();
-        services.AddScoped<CriticAgent>();
-        services.AddScoped<IWriterCriticService, WriterCriticService>();
+            services.AddScoped<WriterAgent>();
+            services.AddScoped<CriticAgent>();
+            services.AddScoped<IWriterCriticService, WriterCriticService>();
+        }
 
         return services;
     }

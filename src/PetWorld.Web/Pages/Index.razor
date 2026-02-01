@@ -1,12 +1,21 @@
 @page "/"
+@using Microsoft.Extensions.DependencyInjection
 @using PetWorld.Application.Interfaces
 @using PetWorld.Application.DTOs
-@inject IChatService ChatService
+@inject IServiceProvider ServiceProvider
 
 <PageTitle>PetWorld - Chat</PageTitle>
 
 <h1>PetWorld - Asystent sklepu zoologicznego</h1>
 
+@if (ChatService == null)
+{
+    <div class="alert alert-warning">
+        <strong>AI niedostepne.</strong> Ustaw klucz OpenAI API w konfiguracji, aby wlaczyc czat.
+    </div>
+}
+else
+{
 <div class="chat-container">
     <div class="input-section">
         <div class="form-group">
@@ -63,12 +72,19 @@
         border-left: 4px solid #0d6efd;
     }
 </style>
+}
 
 @code {
+    private IChatService? ChatService;
     private string question = string.Empty;
     private ChatResponseDto? response;
     private bool isLoading = false;
     private string? errorMessage;
+
+    protected override void OnInitialized()
+    {
+        ChatService = ServiceProvider.GetService<IChatService>();
+    }
 
     private async Task SendQuestion()
     {
@@ -81,7 +97,7 @@
 
         try
         {
-            response = await ChatService.ProcessQuestionAsync(question);
+            response = await ChatService!.ProcessQuestionAsync(question);
             question = string.Empty;
         }
         catch (Exception ex)

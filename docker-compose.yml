@@ -29,6 +29,7 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=petworld;User=root;Password=root;
       - OpenAI__ApiKey=${OPENAI_API_KEY}
     depends_on:
