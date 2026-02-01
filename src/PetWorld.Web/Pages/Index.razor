@@ -1,0 +1,96 @@
+@page "/"
+@using PetWorld.Application.Interfaces
+@using PetWorld.Application.DTOs
+@inject IChatService ChatService
+
+<PageTitle>PetWorld - Chat</PageTitle>
+
+<h1>PetWorld - Asystent sklepu zoologicznego</h1>
+
+<div class="chat-container">
+    <div class="input-section">
+        <div class="form-group">
+            <label for="question">Zadaj pytanie o produkty dla zwierząt:</label>
+            <textarea id="question" class="form-control" rows="3" @bind="question"
+                      placeholder="Np. Szukam karmy dla dorosłego psa..." disabled="@isLoading"></textarea>
+        </div>
+        <button class="btn btn-primary mt-2" @onclick="SendQuestion" disabled="@(isLoading || string.IsNullOrWhiteSpace(question))">
+            @if (isLoading)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span> Przetwarzanie...</span>
+            }
+            else
+            {
+                <span>Wyslij</span>
+            }
+        </button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    @if (response != null)
+    {
+        <div class="response-section mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Odpowiedz asystenta</span>
+                    <span class="badge bg-info">Iteracje Writer-Critic: @response.IterationCount</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text" style="white-space: pre-wrap;">@response.Answer</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .chat-container {
+        max-width: 800px;
+    }
+
+    .input-section textarea {
+        resize: vertical;
+    }
+
+    .response-section .card {
+        border-left: 4px solid #0d6efd;
+    }
+</style>
+
+@code {
+    private string question = string.Empty;
+    private ChatResponseDto? response;
+    private bool isLoading = false;
+    private string? errorMessage;
+
+    private async Task SendQuestion()
+    {
+        if (string.IsNullOrWhiteSpace(question))
+            return;
+
+        isLoading = true;
+        errorMessage = null;
+        response = null;
+
+        try
+        {
+            response = await ChatService.ProcessQuestionAsync(question);
+            question = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Wystapil blad: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

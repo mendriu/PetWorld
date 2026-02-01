@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: petworld-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: petworld
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - petworld-network
+
+  web:
+    build:
+      context: ./src
+      dockerfile: PetWorld.Web/Dockerfile
+    container_name: petworld-web
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=petworld;User=root;Password=root;
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - petworld-network
+
+volumes:
+  mysql_data:
+
+networks:
+  petworld-network:
+    driver: bridge
