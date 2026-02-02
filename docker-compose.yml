@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   mysql:
@@ -20,6 +20,9 @@ services:
     networks:
       - petworld-network
 
+  # ===== PRODUCTION =====
+  # Uzywa OpenAI API (wymaga OPENAI_API_KEY)
+  # Uruchom: docker-compose up -d web
   web:
     build:
       context: ./src
@@ -38,8 +41,52 @@ services:
     networks:
       - petworld-network
 
+  # ===== DEVELOPMENT =====
+  # Uzywa Ollama z kontenera (nie wymaga klucza API)
+  # Uruchom: docker-compose --profile dev up -d
+  web-dev:
+    build:
+      context: ./src
+      dockerfile: PetWorld.Web/Dockerfile
+    container_name: petworld-web-dev
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=petworld;User=root;Password=root;
+      # ollama = nazwa serwisu w docker-compose (Docker DNS)
+      - Ollama__Endpoint=http://ollama:11434/v1/
+      - Ollama__Model=llama3.2:latest
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - petworld-network
+    profiles:
+      - dev
+
+  ollama:
+    image: ghcr.io/open-webui/open-webui:ollama
+    container_name: petworld-ollama
+    ports:
+      - "3100:8080"  # Open WebUI interface
+      - "11434:11434"  # Ollama API
+    volumes:
+      - ollama_data:/root/.ollama
+      - open_webui_data:/app/backend/data
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    networks:
+      - petworld-network
+    restart: unless-stopped
+
 volumes:
   mysql_data:
+  ollama_data:
+  open_webui_data:
 
 networks:
   petworld-network:

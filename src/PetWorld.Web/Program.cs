@@ -16,12 +16,20 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddInfrastructure(connectionString);
 
-// Add AI services (optional - only if API key is configured)
+// Add AI services
+// - Development: uzywa Ollama (nie wymaga klucza API)
+// - Production: wymaga klucza OpenAI API
 var openAiApiKey = builder.Configuration["OpenAI:ApiKey"];
-builder.Services.AddAI(openAiApiKey);
+var isDevelopment = builder.Environment.IsDevelopment();
+var ollamaEndpoint = builder.Configuration["Ollama:Endpoint"] ?? "http://localhost:11434/v1/";
+var ollamaModel = builder.Configuration["Ollama:Model"] ?? "llama3.2:latest";
 
-// Add Application services (only if AI is configured)
-if (!string.IsNullOrWhiteSpace(openAiApiKey))
+builder.Services.AddAI(openAiApiKey, isDevelopment, ollamaEndpoint, ollamaModel);
+
+// Add Application services
+// W Development: zawsze dostepne (Ollama)
+// W Production: tylko jesli klucz OpenAI jest ustawiony
+if (isDevelopment || !string.IsNullOrWhiteSpace(openAiApiKey))
 {
     builder.Services.AddScoped<IChatService, ChatService>();
 }

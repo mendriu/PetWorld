@@ -29,30 +29,78 @@ Web → Application → Domain ← Infrastructure
 ## Wymagania
 
 - Docker i Docker Compose
-- Klucz API OpenAI
+- **Production**: Klucz API OpenAI
+- **Development**: Ollama (wbudowana w docker-compose)
 
 ## Uruchomienie
 
-1. Ustaw zmienną środowiskową z kluczem OpenAI:
+### Tryb DEVELOPMENT (Ollama - bez klucza API)
+
+Idealny do lokalnego testowania. Uzywa Ollama z modelem llama3.2.
 
 ```bash
+# Uruchom z profilem dev (wlacza Ollama + web-dev)
+docker-compose --profile dev up -d --build
+
+# Lub przebuduj tylko web-dev
+docker-compose --profile dev up -d --build web-dev
+```
+
+Dostep: http://localhost:5001
+
+> **Uwaga**: Pierwsze uruchomienie moze trwac dluzej - Ollama pobiera model (~2GB).
+
+> **Bonus**: Open WebUI dostepne pod http://localhost:3100 - interfejs do zarzadzania Ollama.
+
+### Tryb PRODUCTION (OpenAI)
+
+Wymaga klucza API OpenAI. Uzywa modelu GPT-4o.
+
+```bash
+# 1. Ustaw klucz API
 # Linux/macOS
-export OPENAI_API_KEY=your-api-key-here
+export OPENAI_API_KEY=sk-your-api-key-here
 
 # Windows PowerShell
-$env:OPENAI_API_KEY="your-api-key-here"
+$env:OPENAI_API_KEY="sk-your-api-key-here"
 
 # Windows CMD
-set OPENAI_API_KEY=your-api-key-here
+set OPENAI_API_KEY=sk-your-api-key-here
+
+# 2. Uruchom aplikacje
+docker-compose up -d --build web
 ```
 
-2. Uruchom aplikację:
+Dostep: http://localhost:5000
+
+### Porownanie trybow
+
+| Cecha | Development | Production |
+|-------|-------------|------------|
+| Port | 5001 | 5000 |
+| AI Provider | Ollama (llama3.2) | OpenAI (GPT-4o) |
+| Wymaga klucza API | Nie | Tak |
+| Jakosc odpowiedzi | Dobra (lokalne LLM) | Najlepsza |
+| Koszty | Bezplatne | Platne (OpenAI) |
+| Komenda | `--profile dev` | domyslnie |
+
+### Przydatne komendy Docker
 
 ```bash
-docker compose up --build
-```
+# Sprawdz logi aplikacji
+docker-compose logs -f web        # Production
+docker-compose logs -f web-dev    # Development
 
-3. Otwórz przeglądarkę pod adresem: http://localhost:5000
+# Zatrzymaj wszystko
+docker-compose --profile dev down
+
+# Przebuduj po zmianach w kodzie
+docker-compose up -d --build web
+docker-compose --profile dev up -d --build web-dev
+
+# Sprawdz status kontenerow
+docker ps
+```
 
 ## Funkcjonalności
 
@@ -83,7 +131,8 @@ Aplikacja wykorzystuje wzorzec Writer-Critic do generowania odpowiedzi:
 - Blazor Server
 - Entity Framework Core
 - MySQL 8.0 (Pomelo.EntityFrameworkCore.MySql)
-- OpenAI API (GPT-4o)
+- OpenAI API (GPT-4o) - Production
+- Ollama (llama3.2) - Development
 - Docker
 
 ## Struktura bazy danych
@@ -99,7 +148,7 @@ Aplikacja wykorzystuje wzorzec Writer-Critic do generowania odpowiedzi:
 
 ## Konfiguracja
 
-Konfiguracja w `appsettings.json`:
+### appsettings.json (Production)
 
 ```json
 {
@@ -107,24 +156,63 @@ Konfiguracja w `appsettings.json`:
     "DefaultConnection": "Server=localhost;Port=3306;Database=petworld;User=root;Password=root;"
   },
   "OpenAI": {
-    "ApiKey": "your-api-key-here"
+    "ApiKey": "sk-your-api-key-here"
   }
 }
 ```
 
-W środowisku Docker konfiguracja jest przekazywana przez zmienne środowiskowe.
+### appsettings.Development.json (Development)
 
-## Rozwój lokalny
-
-1. Uruchom MySQL (np. przez Docker):
-```bash
-docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petworld -p 3306:3306 mysql:8.0
+```json
+{
+  "Ollama": {
+    "Endpoint": "http://localhost:11434/v1/",
+    "Model": "llama3.2:latest"
+  }
+}
 ```
 
-2. Ustaw klucz OpenAI w `appsettings.json` lub zmiennej środowiskowej
+### Zmienne srodowiskowe
 
-3. Uruchom aplikację:
+| Zmienna | Opis | Przyklad |
+|---------|------|----------|
+| `ASPNETCORE_ENVIRONMENT` | Tryb aplikacji | `Development` lub `Production` |
+| `OpenAI__ApiKey` | Klucz API OpenAI | `sk-...` |
+| `Ollama__Endpoint` | URL API Ollama | `http://localhost:11434/v1/` |
+| `Ollama__Model` | Model Ollama | `llama3.2:latest` |
+| `ConnectionStrings__DefaultConnection` | Connection string MySQL | `Server=...` |
+
+## Rozwoj lokalny (bez Docker)
+
+### Opcja 1: Development z Ollama
+
 ```bash
+# 1. Zainstaluj i uruchom Ollama (https://ollama.ai)
+ollama serve
+
+# 2. Pobierz model
+ollama pull llama3.2:latest
+
+# 3. Uruchom MySQL
+docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petworld -p 3306:3306 mysql:8.0
+
+# 4. Uruchom aplikacje w trybie Development
+cd src/PetWorld.Web
+set ASPNETCORE_ENVIRONMENT=Development
+dotnet run
+```
+
+### Opcja 2: Production z OpenAI
+
+```bash
+# 1. Uruchom MySQL
+docker run -d --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petworld -p 3306:3306 mysql:8.0
+
+# 2. Ustaw klucz OpenAI
+set ASPNETCORE_ENVIRONMENT=Production
+set OpenAI__ApiKey=sk-your-api-key-here
+
+# 3. Uruchom aplikacje
 cd src/PetWorld.Web
 dotnet run
 ```

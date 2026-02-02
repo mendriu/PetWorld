@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetWorld - Dokumentacja Technologii</title>
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --secondary: #6c757d;
+            --success: #198754;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --code-bg: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #0056b3);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        nav.toc {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+
+        nav.toc h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+
+        nav.toc ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav.toc a {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--light);
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        nav.toc a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        section > h2 {
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+        }
+
+        section > .content {
+            padding: 25px;
+        }
+
+        h3 {
+            color: var(--primary);
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        h4 {
+            color: var(--secondary);
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin: 2px;
+        }
+
+        .tech-badge.green { background: var(--success); }
+        .tech-badge.gray { background: var(--secondary); }
+        .tech-badge.orange { background: #fd7e14; }
+        .tech-badge.purple { background: #6f42c1; }
+
+        pre {
+            background: var(--code-bg);
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .inline-code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #c7254e;
+        }
+
+        .code-comment {
+            color: #6a9955;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-type {
+            color: #4ec9b0;
+        }
+
+        .code-method {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .explanation {
+            background: #e7f3ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .explanation.warning {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+
+        .explanation.success {
+            background: #d1e7dd;
+            border-left-color: var(--success);
+        }
+
+        .explanation strong {
+            color: var(--primary);
+        }
+
+        .architecture-diagram {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .layer {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .layer.web { background: #0d6efd; }
+        .layer.app { background: #6f42c1; }
+        .layer.domain { background: #198754; }
+        .layer.infra { background: #fd7e14; }
+        .layer.ai { background: #dc3545; }
+
+        .arrow {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .file-path {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+
+            nav.toc ul {
+                flex-direction: column;
+            }
+        }
+
+        .qa-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .qa-section h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .qa-section p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PetWorld - Dokumentacja Technologii</h1>
+    <p>Kompletny przewodnik po architekturze i kodzie aplikacji</p>
+</header>
+
+<div class="container">
+
+<nav class="toc">
+    <h2>Spis tresci</h2>
+    <ul>
+        <li><a href="#overview">Przeglad projektu</a></li>
+        <li><a href="#architecture">Architektura Clean</a></li>
+        <li><a href="#technologies">Technologie</a></li>
+        <li><a href="#domain">Warstwa Domain</a></li>
+        <li><a href="#application">Warstwa Application</a></li>
+        <li><a href="#infrastructure">Warstwa Infrastructure</a></li>
+        <li><a href="#ai">Warstwa AI</a></li>
+        <li><a href="#web">Warstwa Web (Blazor)</a></li>
+        <li><a href="#docker">Docker i DevOps</a></li>
+        <li><a href="#di">Dependency Injection</a></li>
+        <li><a href="#patterns">Wzorce projektowe</a></li>
+        <li><a href="#qa">Pytania rekrutacyjne</a></li>
+    </ul>
+</nav>
+
+<!-- ==================== OVERVIEW ==================== -->
+<section id="overview">
+    <h2>1. Przeglad projektu</h2>
+    <div class="content">
+        <p><strong>PetWorld</strong> to aplikacja webowa typu chatbot dla sklepu zoologicznego. Wykorzystuje sztuczna inteligencje (OpenAI GPT-4) do odpowiadania na pytania klientow o produkty dla zwierzat.</p>
+
+        <h3>Glowne funkcjonalnosci</h3>
+        <ul>
+            <li><strong>Chat AI</strong> - interaktywny asystent odpowiadajacy na pytania o produkty</li>
+            <li><strong>Writer-Critic Pattern</strong> - dwuetapowa walidacja odpowiedzi AI</li>
+            <li><strong>Historia rozmow</strong> - zapis wszystkich konwersacji w bazie danych</li>
+            <li><strong>Responsywny interfejs</strong> - Blazor Server z Bootstrap</li>
+        </ul>
+
+        <h3>Uzyty stos technologiczny</h3>
+        <p>
+            <span class="tech-badge">.NET 7</span>
+            <span class="tech-badge green">Blazor Server</span>
+            <span class="tech-badge purple">Entity Framework Core</span>
+            <span class="tech-badge orange">MySQL 8.0</span>
+            <span class="tech-badge gray">Docker</span>
+            <span class="tech-badge">OpenAI API</span>
+        </p>
+    </div>
+</section>
+
+<!-- ==================== ARCHITECTURE ==================== -->
+<section id="architecture">
+    <h2>2. Architektura Clean Architecture</h2>
+    <div class="content">
+        <div class="architecture-diagram">
+            <div class="layer web">PetWorld.Web</div>
+            <div class="arrow">&#8595;</div><br>
+            <div class="layer ai">PetWorld.AI</div>
+            <div class="layer app">PetWorld.Application</div>
+            <div class="arrow">&#8595;</div><br>
+            <div class="layer infra">PetWorld.Infrastructure</div>
+            <div class="arrow">&#8595;</div><br>
+            <div class="layer domain">PetWorld.Domain</div>
+        </div>
+
+        <div class="explanation">
+            <strong>Clean Architecture</strong> (Czysta Architektura) to wzorzec architektoniczny stworzony przez Roberta C. Martina ("Uncle Bob").
+            Glowna zasada: <em>zaleznosci wskazuja do wewnatrz</em> - warstwy zewnetrzne zalezy od wewnetrznych, nigdy odwrotnie.
+        </div>
+
+        <h3>Warstwy projektu</h3>
+        <table>
+            <tr>
+                <th>Warstwa</th>
+                <th>Odpowiedzialnosc</th>
+                <th>Zaleznosci</th>
+            </tr>
+            <tr>
+                <td><strong>Domain</strong></td>
+                <td>Encje biznesowe, interfejsy repozytoriow</td>
+                <td>Brak (rdzen aplikacji)</td>
+            </tr>
+            <tr>
+                <td><strong>Application</strong></td>
+                <td>Logika biznesowa, serwisy, DTO</td>
+                <td>Domain</td>
+            </tr>
+            <tr>
+                <td><strong>Infrastructure</strong></td>
+                <td>Implementacja repozytoriow, baza danych</td>
+                <td>Domain, Application</td>
+            </tr>
+            <tr>
+                <td><strong>AI</strong></td>
+                <td>Integracja z OpenAI, agenci AI</td>
+                <td>Application</td>
+            </tr>
+            <tr>
+                <td><strong>Web</strong></td>
+                <td>Interfejs uzytkownika (Blazor)</td>
+                <td>Wszystkie warstwy</td>
+            </tr>
+        </table>
+
+        <div class="explanation success">
+            <strong>Korzysci Clean Architecture:</strong>
+            <ul>
+                <li>Niezaleznosc od frameworkow - logika biznesowa nie zalezy od ASP.NET</li>
+                <li>Testowalnosc - kazda warstwa moze byc testowana oddzielnie</li>
+                <li>Latwosc wymiany komponentow - mozna zmienic baze danych bez modyfikacji logiki</li>
+                <li>Separacja odpowiedzialnosci (SoC)</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== TECHNOLOGIES ==================== -->
+<section id="technologies">
+    <h2>3. Uzyte technologie - szczegolowy opis</h2>
+    <div class="content">
+
+        <h3>3.1 .NET 7</h3>
+        <p>.NET 7 to platforma programistyczna Microsoftu do tworzenia aplikacji. Jest to wersja cross-platform (dziala na Windows, Linux, macOS).</p>
+
+        <div class="explanation">
+            <strong>Dlaczego .NET 7?</strong>
+            <ul>
+                <li>Najnowsza stabilna wersja w momencie tworzenia projektu</li>
+                <li>Natywna obsluga C# 11 z nowymi funkcjami jezykowymi</li>
+                <li>Zoptymalizowana wydajnosc i mniejsze zuzycie pamieci</li>
+                <li>Wbudowane wsparcie dla konteneryzacji</li>
+            </ul>
+        </div>
+
+        <h3>3.2 Blazor Server</h3>
+        <p>Blazor to framework do tworzenia interaktywnych aplikacji webowych w C# zamiast JavaScript.</p>
+
+        <pre><span class="code-comment">// Przyklad komponentu Blazor</span>
+<span class="code-keyword">@page</span> <span class="code-string">"/"</span>
+<span class="code-keyword">@inject</span> <span class="code-type">IServiceProvider</span> ServiceProvider
+
+&lt;<span class="code-type">h1</span>&gt;PetWorld&lt;/<span class="code-type">h1</span>&gt;
+
+<span class="code-keyword">@code</span> {
+    <span class="code-keyword">private</span> <span class="code-type">IChatService</span>? ChatService;
+
+    <span class="code-keyword">protected override void</span> <span class="code-method">OnInitialized</span>()
+    {
+        ChatService = ServiceProvider.<span class="code-method">GetService</span>&lt;<span class="code-type">IChatService</span>&gt;();
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>Blazor Server vs Blazor WebAssembly:</strong>
+            <ul>
+                <li><strong>Blazor Server</strong> - kod wykonywany na serwerze, komunikacja przez SignalR (WebSocket)</li>
+                <li><strong>Blazor WASM</strong> - kod wykonywany w przegladarce (kompilacja do WebAssembly)</li>
+            </ul>
+            Wybralismy <strong>Server</strong> bo: szybszy start, pelny dostep do serwera, lepsze dla SEO.
+        </div>
+
+        <h3>3.3 Entity Framework Core (EF Core)</h3>
+        <p>EF Core to ORM (Object-Relational Mapper) - mapuje obiekty C# na tabele w bazie danych.</p>
+
+        <pre><span class="code-comment">// Definicja DbContext</span>
+<span class="code-keyword">public class</span> <span class="code-type">PetWorldDbContext</span> : <span class="code-type">DbContext</span>
+{
+    <span class="code-keyword">public</span> <span class="code-type">DbSet</span>&lt;<span class="code-type">ChatHistory</span>&gt; ChatHistories { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }
+
+    <span class="code-keyword">protected override void</span> <span class="code-method">OnModelCreating</span>(<span class="code-type">ModelBuilder</span> modelBuilder)
+    {
+        modelBuilder.<span class="code-method">Entity</span>&lt;<span class="code-type">ChatHistory</span>&gt;(entity =&gt;
+        {
+            entity.<span class="code-method">HasKey</span>(e =&gt; e.Id);
+            entity.<span class="code-method">Property</span>(e =&gt; e.Question).<span class="code-method">IsRequired</span>().<span class="code-method">HasMaxLength</span>(<span class="code-number">2000</span>);
+        });
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>Kluczowe pojecia EF Core:</strong>
+            <ul>
+                <li><strong>DbContext</strong> - reprezentuje sesje z baza danych</li>
+                <li><strong>DbSet&lt;T&gt;</strong> - reprezentuje tabele w bazie</li>
+                <li><strong>Migrations</strong> - wersjonowanie schematu bazy danych</li>
+                <li><strong>Fluent API</strong> - konfiguracja mapowania w OnModelCreating</li>
+            </ul>
+        </div>
+
+        <h3>3.4 MySQL z Pomelo</h3>
+        <p>Pomelo.EntityFrameworkCore.MySql to provider EF Core dla bazy MySQL.</p>
+
+        <pre><span class="code-comment">// Konfiguracja polaczenia z MySQL</span>
+<span class="code-keyword">var</span> serverVersion = <span class="code-keyword">new</span> <span class="code-type">MySqlServerVersion</span>(<span class="code-keyword">new</span> <span class="code-type">Version</span>(<span class="code-number">8</span>, <span class="code-number">0</span>, <span class="code-number">0</span>));
+
+services.<span class="code-method">AddDbContext</span>&lt;<span class="code-type">PetWorldDbContext</span>&gt;(options =&gt;
+    options.<span class="code-method">UseMySql</span>(connectionString, serverVersion));</pre>
+
+        <h3>3.5 OpenAI SDK</h3>
+        <p>Oficjalny SDK do komunikacji z API OpenAI (GPT-4, ChatGPT).</p>
+
+        <pre><span class="code-comment">// Inicjalizacja klienta OpenAI</span>
+<span class="code-keyword">var</span> client = <span class="code-keyword">new</span> <span class="code-type">OpenAIClient</span>(apiKey);
+<span class="code-keyword">var</span> chatClient = client.<span class="code-method">GetChatClient</span>(<span class="code-string">"gpt-4o"</span>);
+
+<span class="code-comment">// Wysylanie wiadomosci</span>
+<span class="code-keyword">var</span> messages = <span class="code-keyword">new</span> <span class="code-type">List</span>&lt;<span class="code-type">ChatMessage</span>&gt;
+{
+    <span class="code-keyword">new</span> <span class="code-type">SystemChatMessage</span>(<span class="code-string">"Jestes asystentem..."</span>),
+    <span class="code-keyword">new</span> <span class="code-type">UserChatMessage</span>(question)
+};
+
+<span class="code-keyword">var</span> response = <span class="code-keyword">await</span> chatClient.<span class="code-method">CompleteChatAsync</span>(messages);</pre>
+
+        <h3>3.6 Docker</h3>
+        <p>Docker to platforma do konteneryzacji aplikacji - pakuje aplikacje z jej zaleznoscia w izolowane srodowisko.</p>
+
+        <div class="explanation">
+            <strong>Kluczowe pojecia Docker:</strong>
+            <ul>
+                <li><strong>Image (Obraz)</strong> - szablon tylko do odczytu z instrukcjami tworzenia kontenera</li>
+                <li><strong>Container (Kontener)</strong> - uruchomiona instancja obrazu</li>
+                <li><strong>Dockerfile</strong> - skrypt definiujacy jak zbudowac obraz</li>
+                <li><strong>docker-compose</strong> - narzedzie do definiowania wielu kontenerow</li>
+                <li><strong>Volume</strong> - trwale przechowywanie danych</li>
+                <li><strong>Network</strong> - wirtualna siec laczaca kontenery</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== DOMAIN ==================== -->
+<section id="domain">
+    <h2>4. Warstwa Domain (PetWorld.Domain)</h2>
+    <div class="content">
+        <p class="file-path">src/PetWorld.Domain/</p>
+
+        <div class="explanation">
+            <strong>Domain</strong> to serce aplikacji. Zawiera encje biznesowe i interfejsy.
+            <em>Nie ma zadnych zaleznosci zewnetrznych</em> - to jest kluczowe w Clean Architecture.
+        </div>
+
+        <h3>4.1 Encja ChatHistory</h3>
+        <p class="file-path">Entities/ChatHistory.cs</p>
+
+        <pre><span class="code-keyword">namespace</span> PetWorld.Domain.Entities;
+
+<span class="code-keyword">public class</span> <span class="code-type">ChatHistory</span>
+{
+    <span class="code-keyword">public int</span> Id { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }                           <span class="code-comment">// Klucz glowny (PK)</span>
+    <span class="code-keyword">public string</span> Question { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">string</span>.Empty; <span class="code-comment">// Pytanie uzytkownika</span>
+    <span class="code-keyword">public string</span> Answer { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">string</span>.Empty;   <span class="code-comment">// Odpowiedz AI</span>
+    <span class="code-keyword">public int</span> IterationCount { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }              <span class="code-comment">// Ile iteracji Writer-Critic</span>
+    <span class="code-keyword">public</span> <span class="code-type">DateTime</span> CreatedAt { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }              <span class="code-comment">// Data utworzenia</span>
+}</pre>
+
+        <div class="explanation">
+            <strong>Wyjasnienie skladni:</strong>
+            <ul>
+                <li><code class="inline-code">public int Id { get; set; }</code> - <strong>Auto-property</strong> w C#, automatycznie tworzy getter i setter</li>
+                <li><code class="inline-code">= string.Empty</code> - <strong>Inicjalizator wlasciwosci</strong>, zapobiega null reference</li>
+                <li><code class="inline-code">namespace X;</code> - <strong>File-scoped namespace</strong> (C# 10+), caly plik nalezy do namespace</li>
+            </ul>
+        </div>
+
+        <h3>4.2 Interfejs repozytorium</h3>
+        <p class="file-path">Interfaces/IChatHistoryRepository.cs</p>
+
+        <pre><span class="code-keyword">using</span> PetWorld.Domain.Entities;
+
+<span class="code-keyword">namespace</span> PetWorld.Domain.Interfaces;
+
+<span class="code-keyword">public interface</span> <span class="code-type">IChatHistoryRepository</span>
+{
+    <span class="code-type">Task</span>&lt;<span class="code-type">ChatHistory</span>&gt; <span class="code-method">AddAsync</span>(<span class="code-type">ChatHistory</span> chatHistory);
+    <span class="code-type">Task</span>&lt;<span class="code-type">IEnumerable</span>&lt;<span class="code-type">ChatHistory</span>&gt;&gt; <span class="code-method">GetAllAsync</span>();
+}</pre>
+
+        <div class="explanation">
+            <strong>Wzorzec Repository:</strong>
+            <ul>
+                <li>Interfejs definiuje <em>kontrakt</em> - co repozytorium musi umiec</li>
+                <li>Implementacja jest w warstwie Infrastructure</li>
+                <li><strong>Dependency Inversion Principle</strong> - warstwa Domain nie wie o EF Core</li>
+                <li><code class="inline-code">Task&lt;T&gt;</code> - operacje asynchroniczne (async/await)</li>
+                <li><code class="inline-code">IEnumerable&lt;T&gt;</code> - kolekcja elementow (lazy evaluation)</li>
+            </ul>
+        </div>
+
+        <h3>4.3 Plik projektu .csproj</h3>
+        <p class="file-path">PetWorld.Domain.csproj</p>
+
+        <pre><span class="code-keyword">&lt;Project</span> Sdk=<span class="code-string">"Microsoft.NET.Sdk"</span><span class="code-keyword">&gt;</span>
+  <span class="code-keyword">&lt;PropertyGroup&gt;</span>
+    <span class="code-keyword">&lt;TargetFramework&gt;</span>net7.0<span class="code-keyword">&lt;/TargetFramework&gt;</span>           <span class="code-comment">&lt;!-- Wersja .NET --&gt;</span>
+    <span class="code-keyword">&lt;ImplicitUsings&gt;</span>enable<span class="code-keyword">&lt;/ImplicitUsings&gt;</span>           <span class="code-comment">&lt;!-- Auto-import podstawowych namespacow --&gt;</span>
+    <span class="code-keyword">&lt;Nullable&gt;</span>enable<span class="code-keyword">&lt;/Nullable&gt;</span>                       <span class="code-comment">&lt;!-- Wlacza nullable reference types --&gt;</span>
+  <span class="code-keyword">&lt;/PropertyGroup&gt;</span>
+<span class="code-keyword">&lt;/Project&gt;</span></pre>
+
+        <div class="explanation warning">
+            <strong>Nullable Reference Types (C# 8+):</strong>
+            <p>Gdy <code class="inline-code">&lt;Nullable&gt;enable&lt;/Nullable&gt;</code> jest wlaczone:</p>
+            <ul>
+                <li><code class="inline-code">string</code> - nie moze byc null</li>
+                <li><code class="inline-code">string?</code> - moze byc null</li>
+            </ul>
+            Kompilator ostrzega o potencjalnych NullReferenceException.
+        </div>
+    </div>
+</section>
+
+<!-- ==================== APPLICATION ==================== -->
+<section id="application">
+    <h2>5. Warstwa Application (PetWorld.Application)</h2>
+    <div class="content">
+        <p class="file-path">src/PetWorld.Application/</p>
+
+        <div class="explanation">
+            <strong>Application</strong> zawiera logike biznesowa aplikacji - serwisy, DTO (Data Transfer Objects) i interfejsy.
+        </div>
+
+        <h3>5.1 DTO (Data Transfer Objects)</h3>
+
+        <h4>ChatRequestDto</h4>
+        <p class="file-path">DTOs/ChatRequestDto.cs</p>
+        <pre><span class="code-keyword">namespace</span> PetWorld.Application.DTOs;
+
+<span class="code-keyword">public class</span> <span class="code-type">ChatRequestDto</span>
+{
+    <span class="code-keyword">public string</span> Question { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">string</span>.Empty;
+}</pre>
+
+        <h4>ChatResponseDto</h4>
+        <p class="file-path">DTOs/ChatResponseDto.cs</p>
+        <pre><span class="code-keyword">namespace</span> PetWorld.Application.DTOs;
+
+<span class="code-keyword">public class</span> <span class="code-type">ChatResponseDto</span>
+{
+    <span class="code-keyword">public string</span> Answer { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">string</span>.Empty;
+    <span class="code-keyword">public int</span> IterationCount { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }
+}</pre>
+
+        <div class="explanation">
+            <strong>DTO vs Entity:</strong>
+            <ul>
+                <li><strong>Entity</strong> (np. ChatHistory) - reprezentuje dane w bazie</li>
+                <li><strong>DTO</strong> - przenosi dane miedzy warstwami, moze miec inna strukture</li>
+            </ul>
+            DTO chroni przed wycieczeniem szczegoluw implementacji (np. Id) do warstwy prezentacji.
+        </div>
+
+        <h3>5.2 Interfejsy serwisow</h3>
+
+        <h4>IChatService</h4>
+        <p class="file-path">Interfaces/IChatService.cs</p>
+        <pre><span class="code-keyword">using</span> PetWorld.Application.DTOs;
+
+<span class="code-keyword">namespace</span> PetWorld.Application.Interfaces;
+
+<span class="code-keyword">public interface</span> <span class="code-type">IChatService</span>
+{
+    <span class="code-type">Task</span>&lt;<span class="code-type">ChatResponseDto</span>&gt; <span class="code-method">ProcessQuestionAsync</span>(<span class="code-keyword">string</span> question);
+}</pre>
+
+        <h4>IWriterCriticService</h4>
+        <p class="file-path">Interfaces/IWriterCriticService.cs</p>
+        <pre><span class="code-keyword">namespace</span> PetWorld.Application.Interfaces;
+
+<span class="code-keyword">public interface</span> <span class="code-type">IWriterCriticService</span>
+{
+    <span class="code-type">Task</span>&lt;(<span class="code-keyword">string</span> Response, <span class="code-keyword">int</span> Iterations)&gt; <span class="code-method">GenerateResponseAsync</span>(<span class="code-keyword">string</span> question);
+}</pre>
+
+        <div class="explanation">
+            <strong>C# Tuple:</strong>
+            <code class="inline-code">(string Response, int Iterations)</code> to <strong>Named Tuple</strong> - pozwala zwrocic wiele wartosci z metody bez tworzenia klasy.
+        </div>
+
+        <h3>5.3 ChatService - implementacja</h3>
+        <p class="file-path">Services/ChatService.cs</p>
+
+        <pre><span class="code-keyword">using</span> PetWorld.Application.DTOs;
+<span class="code-keyword">using</span> PetWorld.Application.Interfaces;
+<span class="code-keyword">using</span> PetWorld.Domain.Entities;
+<span class="code-keyword">using</span> PetWorld.Domain.Interfaces;
+
+<span class="code-keyword">namespace</span> PetWorld.Application.Services;
+
+<span class="code-keyword">public class</span> <span class="code-type">ChatService</span> : <span class="code-type">IChatService</span>
+{
+    <span class="code-keyword">private readonly</span> <span class="code-type">IWriterCriticService</span> _writerCriticService;  <span class="code-comment">// Dependency Injection</span>
+    <span class="code-keyword">private readonly</span> <span class="code-type">IChatHistoryRepository</span> _chatHistoryRepository;
+
+    <span class="code-comment">// Konstruktor - wstrzykiwanie zaleznosci</span>
+    <span class="code-keyword">public</span> <span class="code-method">ChatService</span>(
+        <span class="code-type">IWriterCriticService</span> writerCriticService,
+        <span class="code-type">IChatHistoryRepository</span> chatHistoryRepository)
+    {
+        _writerCriticService = writerCriticService;
+        _chatHistoryRepository = chatHistoryRepository;
+    }
+
+    <span class="code-keyword">public async</span> <span class="code-type">Task</span>&lt;<span class="code-type">ChatResponseDto</span>&gt; <span class="code-method">ProcessQuestionAsync</span>(<span class="code-keyword">string</span> question)
+    {
+        <span class="code-comment">// 1. Wywolaj AI aby uzyskac odpowiedz</span>
+        <span class="code-keyword">var</span> (response, iterations) = <span class="code-keyword">await</span> _writerCriticService.<span class="code-method">GenerateResponseAsync</span>(question);
+
+        <span class="code-comment">// 2. Utworz encje do zapisu w bazie</span>
+        <span class="code-keyword">var</span> chatHistory = <span class="code-keyword">new</span> <span class="code-type">ChatHistory</span>
+        {
+            Question = question,
+            Answer = response,
+            IterationCount = iterations,
+            CreatedAt = <span class="code-type">DateTime</span>.UtcNow  <span class="code-comment">// Zawsze UTC w bazie!</span>
+        };
+
+        <span class="code-comment">// 3. Zapisz do bazy danych</span>
+        <span class="code-keyword">await</span> _chatHistoryRepository.<span class="code-method">AddAsync</span>(chatHistory);
+
+        <span class="code-comment">// 4. Zwroc DTO</span>
+        <span class="code-keyword">return new</span> <span class="code-type">ChatResponseDto</span>
+        {
+            Answer = response,
+            IterationCount = iterations
+        };
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>Kluczowe elementy:</strong>
+            <ul>
+                <li><code class="inline-code">private readonly</code> - pole tylko do odczytu, przypisane w konstruktorze</li>
+                <li><code class="inline-code">async/await</code> - programowanie asynchroniczne, nie blokuje watku</li>
+                <li><code class="inline-code">var (response, iterations) = ...</code> - <strong>Tuple deconstruction</strong></li>
+                <li><code class="inline-code">DateTime.UtcNow</code> - zawsze zapisuj daty w UTC!</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== INFRASTRUCTURE ==================== -->
+<section id="infrastructure">
+    <h2>6. Warstwa Infrastructure (PetWorld.Infrastructure)</h2>
+    <div class="content">
+        <p class="file-path">src/PetWorld.Infrastructure/</p>
+
+        <div class="explanation">
+            <strong>Infrastructure</strong> implementuje interfejsy z Domain - tu jest kod zwiazany z baza danych, zewnetrznymi API itp.
+        </div>
+
+        <h3>6.1 PetWorldDbContext</h3>
+        <p class="file-path">Data/PetWorldDbContext.cs</p>
+
+        <pre><span class="code-keyword">using</span> Microsoft.EntityFrameworkCore;
+<span class="code-keyword">using</span> PetWorld.Domain.Entities;
+
+<span class="code-keyword">namespace</span> PetWorld.Infrastructure.Data;
+
+<span class="code-keyword">public class</span> <span class="code-type">PetWorldDbContext</span> : <span class="code-type">DbContext</span>
+{
+    <span class="code-comment">// Konstruktor przyjmuje opcje konfiguracji (connection string itp.)</span>
+    <span class="code-keyword">public</span> <span class="code-method">PetWorldDbContext</span>(<span class="code-type">DbContextOptions</span>&lt;<span class="code-type">PetWorldDbContext</span>&gt; options)
+        : <span class="code-keyword">base</span>(options)  <span class="code-comment">// Wywolaj konstruktor bazowy</span>
+    {
+    }
+
+    <span class="code-comment">// DbSet reprezentuje tabele ChatHistories w bazie</span>
+    <span class="code-keyword">public</span> <span class="code-type">DbSet</span>&lt;<span class="code-type">ChatHistory</span>&gt; ChatHistories { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">null</span>!;
+
+    <span class="code-comment">// Konfiguracja mapowania encji na tabele (Fluent API)</span>
+    <span class="code-keyword">protected override void</span> <span class="code-method">OnModelCreating</span>(<span class="code-type">ModelBuilder</span> modelBuilder)
+    {
+        <span class="code-keyword">base</span>.<span class="code-method">OnModelCreating</span>(modelBuilder);
+
+        modelBuilder.<span class="code-method">Entity</span>&lt;<span class="code-type">ChatHistory</span>&gt;(entity =&gt;
+        {
+            entity.<span class="code-method">HasKey</span>(e =&gt; e.Id);                    <span class="code-comment">// Klucz glowny</span>
+
+            entity.<span class="code-method">Property</span>(e =&gt; e.Question)
+                .<span class="code-method">IsRequired</span>()                          <span class="code-comment">// NOT NULL</span>
+                .<span class="code-method">HasMaxLength</span>(<span class="code-number">2000</span>);                    <span class="code-comment">// VARCHAR(2000)</span>
+
+            entity.<span class="code-method">Property</span>(e =&gt; e.Answer)
+                .<span class="code-method">IsRequired</span>()
+                .<span class="code-method">HasColumnType</span>(<span class="code-string">"TEXT"</span>);               <span class="code-comment">// TEXT - dlugie teksty</span>
+
+            entity.<span class="code-method">Property</span>(e =&gt; e.CreatedAt)
+                .<span class="code-method">IsRequired</span>();
+        });
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>Fluent API vs Data Annotations:</strong>
+            <ul>
+                <li><strong>Fluent API</strong> (uzyty tutaj) - konfiguracja w OnModelCreating, bardziej elastyczna</li>
+                <li><strong>Data Annotations</strong> - atrybuty na wlasciwosciach (np. [Required], [MaxLength(100)])</li>
+            </ul>
+            <code class="inline-code">= null!</code> - operator "null-forgiving", mowi kompilatorowi "wiem ze to nie bedzie null"
+        </div>
+
+        <h3>6.2 ChatHistoryRepository</h3>
+        <p class="file-path">Repositories/ChatHistoryRepository.cs</p>
+
+        <pre><span class="code-keyword">using</span> Microsoft.EntityFrameworkCore;
+<span class="code-keyword">using</span> PetWorld.Domain.Entities;
+<span class="code-keyword">using</span> PetWorld.Domain.Interfaces;
+<span class="code-keyword">using</span> PetWorld.Infrastructure.Data;
+
+<span class="code-keyword">namespace</span> PetWorld.Infrastructure.Repositories;
+
+<span class="code-keyword">public class</span> <span class="code-type">ChatHistoryRepository</span> : <span class="code-type">IChatHistoryRepository</span>
+{
+    <span class="code-keyword">private readonly</span> <span class="code-type">PetWorldDbContext</span> _context;
+
+    <span class="code-keyword">public</span> <span class="code-method">ChatHistoryRepository</span>(<span class="code-type">PetWorldDbContext</span> context)
+    {
+        _context = context;
+    }
+
+    <span class="code-keyword">public async</span> <span class="code-type">Task</span>&lt;<span class="code-type">ChatHistory</span>&gt; <span class="code-method">AddAsync</span>(<span class="code-type">ChatHistory</span> chatHistory)
+    {
+        _context.ChatHistories.<span class="code-method">Add</span>(chatHistory);   <span class="code-comment">// Dodaj do kontekstu</span>
+        <span class="code-keyword">await</span> _context.<span class="code-method">SaveChangesAsync</span>();         <span class="code-comment">// Zapisz do bazy (INSERT)</span>
+        <span class="code-keyword">return</span> chatHistory;                        <span class="code-comment">// Id jest teraz ustawione</span>
+    }
+
+    <span class="code-keyword">public async</span> <span class="code-type">Task</span>&lt;<span class="code-type">IEnumerable</span>&lt;<span class="code-type">ChatHistory</span>&gt;&gt; <span class="code-method">GetAllAsync</span>()
+    {
+        <span class="code-keyword">return await</span> _context.ChatHistories
+            .<span class="code-method">OrderByDescending</span>(c =&gt; c.CreatedAt)  <span class="code-comment">// Sortuj od najnowszych</span>
+            .<span class="code-method">ToListAsync</span>();                        <span class="code-comment">// Wykonaj zapytanie</span>
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>LINQ (Language Integrated Query):</strong>
+            <ul>
+                <li><code class="inline-code">OrderByDescending(c => c.CreatedAt)</code> - sortowanie malejaco</li>
+                <li><code class="inline-code">c => c.CreatedAt</code> - <strong>Lambda expression</strong> (funkcja anonimowa)</li>
+                <li><code class="inline-code">ToListAsync()</code> - wykonuje zapytanie i zwraca List&lt;T&gt;</li>
+            </ul>
+            EF Core tlumaczy LINQ na SQL: <code class="inline-code">SELECT * FROM ChatHistories ORDER BY CreatedAt DESC</code>
+        </div>
+
+        <h3>6.3 DependencyInjection (rejestracja serwisow)</h3>
+        <p class="file-path">DependencyInjection.cs</p>
+
+        <pre><span class="code-keyword">using</span> Microsoft.EntityFrameworkCore;
+<span class="code-keyword">using</span> Microsoft.Extensions.DependencyInjection;
+<span class="code-keyword">using</span> PetWorld.Domain.Interfaces;
+<span class="code-keyword">using</span> PetWorld.Infrastructure.Data;
+<span class="code-keyword">using</span> PetWorld.Infrastructure.Repositories;
+
+<span class="code-keyword">namespace</span> PetWorld.Infrastructure;
+
+<span class="code-keyword">public static class</span> <span class="code-type">DependencyInjection</span>
+{
+    <span class="code-comment">// Extension method - rozszerza IServiceCollection</span>
+    <span class="code-keyword">public static</span> <span class="code-type">IServiceCollection</span> <span class="code-method">AddInfrastructure</span>(
+        <span class="code-keyword">this</span> <span class="code-type">IServiceCollection</span> services,  <span class="code-comment">// 'this' = extension method</span>
+        <span class="code-keyword">string</span> connectionString)
+    {
+        <span class="code-comment">// Wersja MySQL (wymagana przez Pomelo)</span>
+        <span class="code-keyword">var</span> serverVersion = <span class="code-keyword">new</span> <span class="code-type">MySqlServerVersion</span>(<span class="code-keyword">new</span> <span class="code-type">Version</span>(<span class="code-number">8</span>, <span class="code-number">0</span>, <span class="code-number">0</span>));
+
+        <span class="code-comment">// Rejestruj DbContext</span>
+        services.<span class="code-method">AddDbContext</span>&lt;<span class="code-type">PetWorldDbContext</span>&gt;(options =&gt;
+            options.<span class="code-method">UseMySql</span>(connectionString, serverVersion));
+
+        <span class="code-comment">// Rejestruj repozytorium (interfejs -> implementacja)</span>
+        services.<span class="code-method">AddScoped</span>&lt;<span class="code-type">IChatHistoryRepository</span>, <span class="code-type">ChatHistoryRepository</span>&gt;();
+
+        <span class="code-keyword">return</span> services;  <span class="code-comment">// Fluent pattern - mozna chainowac</span>
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>Extension Methods:</strong>
+            <p>Slowo kluczowe <code class="inline-code">this</code> przed pierwszym parametrem tworzy metode rozszerzajaca.
+            Pozwala "dodac" metode do istniejacego typu bez modyfikacji jego kodu.</p>
+            <p>Uzycie: <code class="inline-code">services.AddInfrastructure(connectionString)</code></p>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== AI ==================== -->
+<section id="ai">
+    <h2>7. Warstwa AI (PetWorld.AI)</h2>
+    <div class="content">
+        <p class="file-path">src/PetWorld.AI/</p>
+
+        <div class="explanation success">
+            <strong>Writer-Critic Pattern</strong> to wzorzec AI gdzie dwa agenty wspolpracuja:
+            <ul>
+                <li><strong>Writer</strong> - generuje odpowiedz</li>
+                <li><strong>Critic</strong> - ocenia odpowiedz i daje feedback</li>
+            </ul>
+            Jesli Critic nie zaakceptuje, Writer poprawia odpowiedz. Maksymalnie 3 iteracje.
+        </div>
+
+        <h3>7.1 WriterAgent</h3>
+        <p class="file-path">Agents/WriterAgent.cs</p>
+
+        <pre><span class="code-keyword">using</span> OpenAI.Chat;
+
+<span class="code-keyword">namespace</span> PetWorld.AI.Agents;
+
+<span class="code-keyword">public class</span> <span class="code-type">WriterAgent</span>
+{
+    <span class="code-keyword">private readonly</span> <span class="code-type">ChatClient</span> _chatClient;
+
+    <span class="code-comment">// Katalog produktow - embedded w kodzie (w realnej aplikacji: baza danych)</span>
+    <span class="code-keyword">private const string</span> ProductCatalog = <span class="code-string">@"
+KATALOG PRODUKTÓW PETWORLD:
+
+KARMA DLA PSÓW:
+- Royal Canin Adult Medium - karma dla dorosłych psów średnich ras (89.99 zł/4kg)
+- Purina Pro Plan Adult Large - karma dla dużych psów dorosłych (129.99 zł/7kg)
+..."</span>;
+
+    <span class="code-comment">// System Prompt - instrukcje dla AI</span>
+    <span class="code-keyword">private const string</span> SystemPrompt = <span class="code-string">@"Jesteś pomocnym asystentem sklepu PetWorld...
+Zawsze staraj się rekomendować konkretne produkty z katalogu wraz z cenami.
+Odpowiadaj po polsku w przyjaznym, ale profesjonalnym tonie.
+
+"</span> + ProductCatalog;
+
+    <span class="code-keyword">public</span> <span class="code-method">WriterAgent</span>(<span class="code-type">ChatClient</span> chatClient)
+    {
+        _chatClient = chatClient;
+    }
+
+    <span class="code-keyword">public async</span> <span class="code-type">Task</span>&lt;<span class="code-keyword">string</span>&gt; <span class="code-method">GenerateResponseAsync</span>(<span class="code-keyword">string</span> question, <span class="code-keyword">string</span>? feedback = <span class="code-keyword">null</span>)
+    {
+        <span class="code-comment">// Budowanie listy wiadomosci dla API</span>
+        <span class="code-keyword">var</span> messages = <span class="code-keyword">new</span> <span class="code-type">List</span>&lt;<span class="code-type">ChatMessage</span>&gt;
+        {
+            <span class="code-keyword">new</span> <span class="code-type">SystemChatMessage</span>(SystemPrompt)  <span class="code-comment">// Instrukcje systemowe</span>
+        };
+
+        <span class="code-keyword">if</span> (feedback != <span class="code-keyword">null</span>)
+        {
+            <span class="code-comment">// Jesli jest feedback od Critica - popraw odpowiedz</span>
+            messages.<span class="code-method">Add</span>(<span class="code-keyword">new</span> <span class="code-type">UserChatMessage</span>(
+                $<span class="code-string">"Poprzednia odpowiedź wymagała poprawy. Feedback: {feedback}\n\n"</span> +
+                $<span class="code-string">"Pytanie klienta: {question}\n\nProszę wygeneruj poprawioną odpowiedź."</span>));
+        }
+        <span class="code-keyword">else</span>
+        {
+            messages.<span class="code-method">Add</span>(<span class="code-keyword">new</span> <span class="code-type">UserChatMessage</span>(question));
+        }
+
+        <span class="code-comment">// Wywolanie API OpenAI</span>
+        <span class="code-keyword">var</span> response = <span class="code-keyword">await</span> _chatClient.<span class="code-method">CompleteChatAsync</span>(messages);
+
+        <span class="code-comment">// Wyciagnij tekst z odpowiedzi</span>
+        <span class="code-keyword">return</span> response.Value.Content[<span class="code-number">0</span>].Text;
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>OpenAI Chat API - typy wiadomosci:</strong>
+            <ul>
+                <li><strong>SystemChatMessage</strong> - instrukcje dla modelu (nie widoczne dla uzytkownika)</li>
+                <li><strong>UserChatMessage</strong> - wiadomosc od uzytkownika</li>
+                <li><strong>AssistantChatMessage</strong> - poprzednie odpowiedzi asystenta</li>
+            </ul>
+            <p><code class="inline-code">string?</code> - nullable string, moze byc null</p>
+            <p><code class="inline-code">$"..."</code> - string interpolation, pozwala wstawiac zmienne</p>
+        </div>
+
+        <h3>7.2 CriticAgent</h3>
+        <p class="file-path">Agents/CriticAgent.cs</p>
+
+        <pre><span class="code-keyword">using</span> System.Text.Json;
+<span class="code-keyword">using</span> OpenAI.Chat;
+
+<span class="code-keyword">namespace</span> PetWorld.AI.Agents;
+
+<span class="code-keyword">public class</span> <span class="code-type">CriticAgent</span>
+{
+    <span class="code-keyword">private readonly</span> <span class="code-type">ChatClient</span> _chatClient;
+
+    <span class="code-keyword">private const string</span> SystemPrompt = <span class="code-string">@"Jesteś krytykiem odpowiedzi asystenta sklepu PetWorld.
+Twoje zadanie to ocenić odpowiedź pod kątem:
+1. Poprawności informacji o produktach
+2. Profesjonalnego i przyjaznego tonu
+3. Kompletności odpowiedzi
+4. Czy zaproponowano konkretne produkty z katalogu
+
+Odpowiedz TYLKO w formacie JSON:
+{
+    ""approved"": true/false,
+    ""feedback"": ""Twój feedback tutaj""
+}"</span>;
+
+    <span class="code-keyword">public async</span> <span class="code-type">Task</span>&lt;(<span class="code-keyword">bool</span> Approved, <span class="code-keyword">string</span> Feedback)&gt; <span class="code-method">EvaluateResponseAsync</span>(
+        <span class="code-keyword">string</span> question, <span class="code-keyword">string</span> response)
+    {
+        <span class="code-keyword">var</span> messages = <span class="code-keyword">new</span> <span class="code-type">List</span>&lt;<span class="code-type">ChatMessage</span>&gt;
+        {
+            <span class="code-keyword">new</span> <span class="code-type">SystemChatMessage</span>(SystemPrompt),
+            <span class="code-keyword">new</span> <span class="code-type">UserChatMessage</span>($<span class="code-string">"Pytanie: {question}\n\nOdpowiedź: {response}"</span>)
+        };
+
+        <span class="code-keyword">var</span> chatResponse = <span class="code-keyword">await</span> _chatClient.<span class="code-method">CompleteChatAsync</span>(messages);
+        <span class="code-keyword">var</span> content = chatResponse.Value.Content[<span class="code-number">0</span>].Text;
+
+        <span class="code-keyword">try</span>
+        {
+            <span class="code-comment">// Wyciagnij JSON z odpowiedzi (moze byc otoczony tekstem)</span>
+            <span class="code-keyword">var</span> jsonStart = content.<span class="code-method">IndexOf</span>(<span class="code-string">'{'</span>);
+            <span class="code-keyword">var</span> jsonEnd = content.<span class="code-method">LastIndexOf</span>(<span class="code-string">'}'</span>);
+            <span class="code-keyword">if</span> (jsonStart >= <span class="code-number">0</span> && jsonEnd > jsonStart)
+            {
+                content = content.<span class="code-method">Substring</span>(jsonStart, jsonEnd - jsonStart + <span class="code-number">1</span>);
+            }
+
+            <span class="code-comment">// Deserializacja JSON do obiektu C#</span>
+            <span class="code-keyword">var</span> result = <span class="code-type">JsonSerializer</span>.<span class="code-method">Deserialize</span>&lt;<span class="code-type">CriticResponse</span>&gt;(content,
+                <span class="code-keyword">new</span> <span class="code-type">JsonSerializerOptions</span> { PropertyNameCaseInsensitive = <span class="code-keyword">true</span> });
+
+            <span class="code-keyword">return</span> (result?.Approved ?? <span class="code-keyword">true</span>, result?.Feedback ?? <span class="code-keyword">string</span>.Empty);
+        }
+        <span class="code-keyword">catch</span>
+        {
+            <span class="code-comment">// Jesli parsing JSON sie nie uda - akceptuj odpowiedz</span>
+            <span class="code-keyword">return</span> (<span class="code-keyword">true</span>, <span class="code-keyword">string</span>.Empty);
+        }
+    }
+
+    <span class="code-comment">// Prywatna klasa do deserializacji JSON</span>
+    <span class="code-keyword">private class</span> <span class="code-type">CriticResponse</span>
+    {
+        <span class="code-keyword">public bool</span> Approved { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; }
+        <span class="code-keyword">public string</span> Feedback { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">string</span>.Empty;
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>JSON Serialization:</strong>
+            <ul>
+                <li><code class="inline-code">JsonSerializer.Deserialize&lt;T&gt;()</code> - zamienia JSON string na obiekt C#</li>
+                <li><code class="inline-code">PropertyNameCaseInsensitive = true</code> - ignoruj wielkosc liter (approved = Approved)</li>
+                <li><code class="inline-code">result?.Approved ?? true</code> - <strong>Null-coalescing</strong>: jesli result jest null, uzyj true</li>
+            </ul>
+        </div>
+
+        <h3>7.3 WriterCriticService</h3>
+        <p class="file-path">Services/WriterCriticService.cs</p>
+
+        <pre><span class="code-keyword">using</span> PetWorld.AI.Agents;
+<span class="code-keyword">using</span> PetWorld.Application.Interfaces;
+
+<span class="code-keyword">namespace</span> PetWorld.AI.Services;
+
+<span class="code-keyword">public class</span> <span class="code-type">WriterCriticService</span> : <span class="code-type">IWriterCriticService</span>
+{
+    <span class="code-keyword">private readonly</span> <span class="code-type">WriterAgent</span> _writerAgent;
+    <span class="code-keyword">private readonly</span> <span class="code-type">CriticAgent</span> _criticAgent;
+    <span class="code-keyword">private const int</span> MaxIterations = <span class="code-number">3</span>;  <span class="code-comment">// Maksymalna liczba prob</span>
+
+    <span class="code-keyword">public</span> <span class="code-method">WriterCriticService</span>(<span class="code-type">WriterAgent</span> writerAgent, <span class="code-type">CriticAgent</span> criticAgent)
+    {
+        _writerAgent = writerAgent;
+        _criticAgent = criticAgent;
+    }
+
+    <span class="code-keyword">public async</span> <span class="code-type">Task</span>&lt;(<span class="code-keyword">string</span> Response, <span class="code-keyword">int</span> Iterations)&gt; <span class="code-method">GenerateResponseAsync</span>(<span class="code-keyword">string</span> question)
+    {
+        <span class="code-keyword">string</span>? feedback = <span class="code-keyword">null</span>;
+        <span class="code-keyword">string</span> response = <span class="code-keyword">string</span>.Empty;
+        <span class="code-keyword">int</span> iteration = <span class="code-number">0</span>;
+
+        <span class="code-comment">// Petla Writer-Critic</span>
+        <span class="code-keyword">while</span> (iteration < MaxIterations)
+        {
+            iteration++;
+
+            <span class="code-comment">// 1. Writer generuje odpowiedz (z feedbackiem jesli jest)</span>
+            response = <span class="code-keyword">await</span> _writerAgent.<span class="code-method">GenerateResponseAsync</span>(question, feedback);
+
+            <span class="code-comment">// 2. Critic ocenia odpowiedz</span>
+            <span class="code-keyword">var</span> (approved, criticFeedback) = <span class="code-keyword">await</span> _criticAgent.<span class="code-method">EvaluateResponseAsync</span>(question, response);
+
+            <span class="code-comment">// 3. Jesli zaakceptowana - konczymy</span>
+            <span class="code-keyword">if</span> (approved)
+            {
+                <span class="code-keyword">break</span>;
+            }
+
+            <span class="code-comment">// 4. Jesli nie ostatnia iteracja - przekaz feedback</span>
+            <span class="code-keyword">if</span> (iteration < MaxIterations)
+            {
+                feedback = criticFeedback;
+            }
+        }
+
+        <span class="code-keyword">return</span> (response, iteration);
+    }
+}</pre>
+
+        <div class="explanation success">
+            <strong>Przeplyw Writer-Critic:</strong>
+            <ol>
+                <li>Writer generuje pierwsza odpowiedz</li>
+                <li>Critic ocenia - jesli OK, koniec</li>
+                <li>Jesli nie OK - Writer poprawia z feedbackiem</li>
+                <li>Powtorz do 3 razy</li>
+            </ol>
+            <p>Zwraca ostatnia odpowiedz + liczbe iteracji (widoczna w UI jako badge).</p>
+        </div>
+
+        <h3>7.4 AI DependencyInjection</h3>
+        <p class="file-path">DependencyInjection.cs</p>
+
+        <pre><span class="code-keyword">using</span> Microsoft.Extensions.DependencyInjection;
+<span class="code-keyword">using</span> OpenAI;
+<span class="code-keyword">using</span> OpenAI.Chat;
+<span class="code-keyword">using</span> PetWorld.AI.Agents;
+<span class="code-keyword">using</span> PetWorld.AI.Services;
+<span class="code-keyword">using</span> PetWorld.Application.Interfaces;
+
+<span class="code-keyword">namespace</span> PetWorld.AI;
+
+<span class="code-keyword">public static class</span> <span class="code-type">DependencyInjection</span>
+{
+    <span class="code-keyword">public static</span> <span class="code-type">IServiceCollection</span> <span class="code-method">AddAI</span>(
+        <span class="code-keyword">this</span> <span class="code-type">IServiceCollection</span> services,
+        <span class="code-keyword">string</span>? openAiApiKey)  <span class="code-comment">// Nullable - klucz moze nie byc ustawiony</span>
+    {
+        <span class="code-comment">// Rejestruj serwisy tylko jesli klucz API istnieje</span>
+        <span class="code-keyword">if</span> (!<span class="code-keyword">string</span>.<span class="code-method">IsNullOrWhiteSpace</span>(openAiApiKey))
+        {
+            <span class="code-comment">// Singleton - jedna instancja ChatClient dla calej aplikacji</span>
+            services.<span class="code-method">AddSingleton</span>(_ =&gt;
+            {
+                <span class="code-keyword">var</span> client = <span class="code-keyword">new</span> <span class="code-type">OpenAIClient</span>(openAiApiKey);
+                <span class="code-keyword">return</span> client.<span class="code-method">GetChatClient</span>(<span class="code-string">"gpt-4o"</span>);  <span class="code-comment">// Model GPT-4o</span>
+            });
+
+            <span class="code-comment">// Scoped - nowa instancja per request</span>
+            services.<span class="code-method">AddScoped</span>&lt;<span class="code-type">WriterAgent</span>&gt;();
+            services.<span class="code-method">AddScoped</span>&lt;<span class="code-type">CriticAgent</span>&gt;();
+            services.<span class="code-method">AddScoped</span>&lt;<span class="code-type">IWriterCriticService</span>, <span class="code-type">WriterCriticService</span>&gt;();
+        }
+
+        <span class="code-keyword">return</span> services;
+    }
+}</pre>
+    </div>
+</section>
+
+<!-- ==================== WEB ==================== -->
+<section id="web">
+    <h2>8. Warstwa Web - Blazor Server (PetWorld.Web)</h2>
+    <div class="content">
+        <p class="file-path">src/PetWorld.Web/</p>
+
+        <h3>8.1 Program.cs - punkt wejscia aplikacji</h3>
+        <p class="file-path">Program.cs</p>
+
+        <pre><span class="code-keyword">using</span> Microsoft.EntityFrameworkCore;
+<span class="code-keyword">using</span> PetWorld.Application.Interfaces;
+<span class="code-keyword">using</span> PetWorld.Application.Services;
+<span class="code-keyword">using</span> PetWorld.AI;
+<span class="code-keyword">using</span> PetWorld.Infrastructure;
+<span class="code-keyword">using</span> PetWorld.Infrastructure.Data;
+
+<span class="code-comment">// Minimal API - nie ma klasy Startup</span>
+<span class="code-keyword">var</span> builder = <span class="code-type">WebApplication</span>.<span class="code-method">CreateBuilder</span>(args);
+
+<span class="code-comment">// === REJESTRACJA SERWISOW ===</span>
+builder.Services.<span class="code-method">AddRazorPages</span>();           <span class="code-comment">// Obsluga stron Razor</span>
+builder.Services.<span class="code-method">AddServerSideBlazor</span>();     <span class="code-comment">// Blazor Server</span>
+
+<span class="code-comment">// Infrastructure - baza danych</span>
+<span class="code-keyword">var</span> connectionString = builder.Configuration.<span class="code-method">GetConnectionString</span>(<span class="code-string">"DefaultConnection"</span>)
+    ?? <span class="code-keyword">throw new</span> <span class="code-type">InvalidOperationException</span>(<span class="code-string">"Connection string not found."</span>);
+builder.Services.<span class="code-method">AddInfrastructure</span>(connectionString);
+
+<span class="code-comment">// AI - opcjonalne (tylko jesli klucz API jest ustawiony)</span>
+<span class="code-keyword">var</span> openAiApiKey = builder.Configuration[<span class="code-string">"OpenAI:ApiKey"</span>];
+builder.Services.<span class="code-method">AddAI</span>(openAiApiKey);
+
+<span class="code-comment">// Application - tylko jesli AI jest skonfigurowane</span>
+<span class="code-keyword">if</span> (!<span class="code-keyword">string</span>.<span class="code-method">IsNullOrWhiteSpace</span>(openAiApiKey))
+{
+    builder.Services.<span class="code-method">AddScoped</span>&lt;<span class="code-type">IChatService</span>, <span class="code-type">ChatService</span>&gt;();
+}
+
+<span class="code-comment">// === BUDOWANIE APLIKACJI ===</span>
+<span class="code-keyword">var</span> app = builder.<span class="code-method">Build</span>();
+
+<span class="code-comment">// Automatyczna migracja bazy danych przy starcie</span>
+<span class="code-keyword">using</span> (<span class="code-keyword">var</span> scope = app.Services.<span class="code-method">CreateScope</span>())
+{
+    <span class="code-keyword">var</span> dbContext = scope.ServiceProvider.<span class="code-method">GetRequiredService</span>&lt;<span class="code-type">PetWorldDbContext</span>&gt;();
+    dbContext.Database.<span class="code-method">Migrate</span>();  <span class="code-comment">// Wykonaj migracje</span>
+}
+
+<span class="code-comment">// === MIDDLEWARE PIPELINE ===</span>
+<span class="code-keyword">if</span> (!app.Environment.<span class="code-method">IsDevelopment</span>())
+{
+    app.<span class="code-method">UseExceptionHandler</span>(<span class="code-string">"/Error"</span>);  <span class="code-comment">// Obsluga bledow w produkcji</span>
+    app.<span class="code-method">UseHsts</span>();                        <span class="code-comment">// HTTP Strict Transport Security</span>
+}
+
+app.<span class="code-method">UseStaticFiles</span>();  <span class="code-comment">// Serwuj pliki statyczne (CSS, JS, images)</span>
+app.<span class="code-method">UseRouting</span>();       <span class="code-comment">// Wlacz routing</span>
+
+app.<span class="code-method">MapBlazorHub</span>();              <span class="code-comment">// SignalR hub dla Blazor</span>
+app.<span class="code-method">MapFallbackToPage</span>(<span class="code-string">"/_Host"</span>);  <span class="code-comment">// Fallback do _Host.cshtml</span>
+
+app.<span class="code-method">Run</span>();  <span class="code-comment">// Uruchom serwer</span></pre>
+
+        <div class="explanation">
+            <strong>Kluczowe pojecia:</strong>
+            <ul>
+                <li><strong>builder.Services</strong> - kontener Dependency Injection</li>
+                <li><strong>builder.Configuration</strong> - dostep do appsettings.json i zmiennych srodowiskowych</li>
+                <li><strong>app.Use...()</strong> - middleware w pipeline HTTP</li>
+                <li><strong>MapBlazorHub()</strong> - SignalR endpoint dla komunikacji Blazor</li>
+            </ul>
+        </div>
+
+        <h3>8.2 Index.razor - strona glowna (Chat)</h3>
+        <p class="file-path">Pages/Index.razor</p>
+
+        <pre><span class="code-keyword">@page</span> <span class="code-string">"/"</span>                                       <span class="code-comment">@* Routing - ta strona obsluguje "/" *@</span>
+<span class="code-keyword">@using</span> Microsoft.Extensions.DependencyInjection
+<span class="code-keyword">@using</span> PetWorld.Application.Interfaces
+<span class="code-keyword">@using</span> PetWorld.Application.DTOs
+<span class="code-keyword">@inject</span> <span class="code-type">IServiceProvider</span> ServiceProvider       <span class="code-comment">@* Dependency Injection *@</span>
+
+&lt;<span class="code-type">PageTitle</span>&gt;PetWorld - Chat&lt;/<span class="code-type">PageTitle</span>&gt;
+
+&lt;<span class="code-type">h1</span>&gt;PetWorld - Asystent sklepu zoologicznego&lt;/<span class="code-type">h1</span>&gt;
+
+<span class="code-comment">@* Warunkowe renderowanie - jesli ChatService niedostepny *@</span>
+<span class="code-keyword">@if</span> (ChatService == <span class="code-keyword">null</span>)
+{
+    &lt;<span class="code-type">div</span> class=<span class="code-string">"alert alert-warning"</span>&gt;
+        &lt;<span class="code-type">strong</span>&gt;AI niedostepne.&lt;/<span class="code-type">strong</span>&gt; Ustaw klucz OpenAI API.
+    &lt;/<span class="code-type">div</span>&gt;
+}
+<span class="code-keyword">else</span>
+{
+    &lt;<span class="code-type">div</span> class=<span class="code-string">"chat-container"</span>&gt;
+        &lt;<span class="code-type">div</span> class=<span class="code-string">"form-group"</span>&gt;
+            &lt;<span class="code-type">label</span>&gt;Zadaj pytanie:&lt;/<span class="code-type">label</span>&gt;
+            <span class="code-comment">@* Two-way binding - @bind laczy zmienna z inputem *@</span>
+            &lt;<span class="code-type">textarea</span> class=<span class="code-string">"form-control"</span> <span class="code-keyword">@bind</span>=<span class="code-string">"question"</span>
+                      disabled=<span class="code-string">"@isLoading"</span>&gt;&lt;/<span class="code-type">textarea</span>&gt;
+        &lt;/<span class="code-type">div</span>&gt;
+
+        <span class="code-comment">@* Event binding - @onclick wywoluje metode *@</span>
+        &lt;<span class="code-type">button</span> class=<span class="code-string">"btn btn-primary"</span> <span class="code-keyword">@onclick</span>=<span class="code-string">"SendQuestion"</span>
+                disabled=<span class="code-string">"@(isLoading || string.IsNullOrWhiteSpace(question))"</span>&gt;
+            <span class="code-keyword">@if</span> (isLoading)
+            {
+                &lt;<span class="code-type">span</span> class=<span class="code-string">"spinner-border spinner-border-sm"</span>&gt;&lt;/<span class="code-type">span</span>&gt;
+                &lt;<span class="code-type">span</span>&gt; Przetwarzanie...&lt;/<span class="code-type">span</span>&gt;
+            }
+            <span class="code-keyword">else</span>
+            {
+                &lt;<span class="code-type">span</span>&gt;Wyslij&lt;/<span class="code-type">span</span>&gt;
+            }
+        &lt;/<span class="code-type">button</span>&gt;
+
+        <span class="code-comment">@* Wyswietlanie odpowiedzi *@</span>
+        <span class="code-keyword">@if</span> (response != <span class="code-keyword">null</span>)
+        {
+            &lt;<span class="code-type">div</span> class=<span class="code-string">"card"</span>&gt;
+                &lt;<span class="code-type">div</span> class=<span class="code-string">"card-header"</span>&gt;
+                    Odpowiedz
+                    &lt;<span class="code-type">span</span> class=<span class="code-string">"badge bg-info"</span>&gt;
+                        Iteracje: <span class="code-keyword">@</span>response.IterationCount
+                    &lt;/<span class="code-type">span</span>&gt;
+                &lt;/<span class="code-type">div</span>&gt;
+                &lt;<span class="code-type">div</span> class=<span class="code-string">"card-body"</span>&gt;
+                    &lt;<span class="code-type">p</span>&gt;<span class="code-keyword">@</span>response.Answer&lt;/<span class="code-type">p</span>&gt;
+                &lt;/<span class="code-type">div</span>&gt;
+            &lt;/<span class="code-type">div</span>&gt;
+        }
+    &lt;/<span class="code-type">div</span>&gt;
+}
+
+<span class="code-keyword">@code</span> {
+    <span class="code-keyword">private</span> <span class="code-type">IChatService</span>? ChatService;
+    <span class="code-keyword">private</span> <span class="code-keyword">string</span> question = <span class="code-keyword">string</span>.Empty;
+    <span class="code-keyword">private</span> <span class="code-type">ChatResponseDto</span>? response;
+    <span class="code-keyword">private</span> <span class="code-keyword">bool</span> isLoading = <span class="code-keyword">false</span>;
+    <span class="code-keyword">private</span> <span class="code-keyword">string</span>? errorMessage;
+
+    <span class="code-comment">// Lifecycle method - wywolywana przy inicjalizacji komponentu</span>
+    <span class="code-keyword">protected override void</span> <span class="code-method">OnInitialized</span>()
+    {
+        <span class="code-comment">// Pobierz serwis z kontenera DI (moze byc null!)</span>
+        ChatService = ServiceProvider.<span class="code-method">GetService</span>&lt;<span class="code-type">IChatService</span>&gt;();
+    }
+
+    <span class="code-comment">// Obsluga klikniecia przycisku</span>
+    <span class="code-keyword">private async</span> <span class="code-type">Task</span> <span class="code-method">SendQuestion</span>()
+    {
+        <span class="code-keyword">if</span> (<span class="code-keyword">string</span>.<span class="code-method">IsNullOrWhiteSpace</span>(question))
+            <span class="code-keyword">return</span>;
+
+        isLoading = <span class="code-keyword">true</span>;
+        errorMessage = <span class="code-keyword">null</span>;
+        response = <span class="code-keyword">null</span>;
+
+        <span class="code-keyword">try</span>
+        {
+            response = <span class="code-keyword">await</span> ChatService!.<span class="code-method">ProcessQuestionAsync</span>(question);
+            question = <span class="code-keyword">string</span>.Empty;  <span class="code-comment">// Wyczysc pole</span>
+        }
+        <span class="code-keyword">catch</span> (<span class="code-type">Exception</span> ex)
+        {
+            errorMessage = $<span class="code-string">"Wystapil blad: {ex.Message}"</span>;
+        }
+        <span class="code-keyword">finally</span>
+        {
+            isLoading = <span class="code-keyword">false</span>;  <span class="code-comment">// Blazor automatycznie rerenduje</span>
+        }
+    }
+}</pre>
+
+        <div class="explanation">
+            <strong>Blazor - kluczowe koncepcje:</strong>
+            <ul>
+                <li><code class="inline-code">@page "/"</code> - routing, definiuje URL</li>
+                <li><code class="inline-code">@inject</code> - wstrzykiwanie serwisow</li>
+                <li><code class="inline-code">@bind</code> - two-way data binding</li>
+                <li><code class="inline-code">@onclick</code> - obsluga zdarzen</li>
+                <li><code class="inline-code">@if/@else</code> - warunkowe renderowanie</li>
+                <li><code class="inline-code">@code { }</code> - logika C# komponentu</li>
+            </ul>
+        </div>
+
+        <h3>8.3 _Host.cshtml - strona hostujaca Blazor</h3>
+        <p class="file-path">Pages/_Host.cshtml</p>
+
+        <pre><span class="code-keyword">@page</span> <span class="code-string">"/"</span>
+<span class="code-keyword">@using</span> Microsoft.AspNetCore.Components.Web
+<span class="code-keyword">@namespace</span> PetWorld.Web.Pages
+<span class="code-keyword">@addTagHelper</span> *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<span class="code-keyword">&lt;!DOCTYPE html&gt;</span>
+&lt;<span class="code-type">html</span> lang=<span class="code-string">"en"</span>&gt;
+&lt;<span class="code-type">head</span>&gt;
+    &lt;<span class="code-type">meta</span> charset=<span class="code-string">"utf-8"</span> /&gt;
+    &lt;<span class="code-type">base</span> href=<span class="code-string">"~/"</span> /&gt;                           <span class="code-comment">&lt;!-- Bazowy URL dla routingu --&gt;</span>
+    &lt;<span class="code-type">link</span> rel=<span class="code-string">"stylesheet"</span> href=<span class="code-string">"css/bootstrap/bootstrap.min.css"</span> /&gt;
+    &lt;<span class="code-type">link</span> href=<span class="code-string">"css/site.css"</span> rel=<span class="code-string">"stylesheet"</span> /&gt;
+
+    <span class="code-comment">&lt;!-- Renderowanie Head z komponentow Blazor --&gt;</span>
+    &lt;<span class="code-type">component</span> type=<span class="code-string">"typeof(HeadOutlet)"</span> render-mode=<span class="code-string">"ServerPrerendered"</span> /&gt;
+&lt;/<span class="code-type">head</span>&gt;
+&lt;<span class="code-type">body</span>&gt;
+    <span class="code-comment">&lt;!-- Glowny komponent Blazor (App.razor) --&gt;</span>
+    &lt;<span class="code-type">component</span> type=<span class="code-string">"typeof(App)"</span> render-mode=<span class="code-string">"ServerPrerendered"</span> /&gt;
+
+    <span class="code-comment">&lt;!-- UI bledu Blazor --&gt;</span>
+    &lt;<span class="code-type">div</span> id=<span class="code-string">"blazor-error-ui"</span>&gt;
+        An error has occurred.
+        &lt;<span class="code-type">a</span> href=<span class="code-string">""</span> class=<span class="code-string">"reload"</span>&gt;Reload&lt;/<span class="code-type">a</span>&gt;
+    &lt;/<span class="code-type">div</span>&gt;
+
+    <span class="code-comment">&lt;!-- Skrypt Blazor Server (SignalR) --&gt;</span>
+    &lt;<span class="code-type">script</span> src=<span class="code-string">"_framework/blazor.server.js"</span>&gt;&lt;/<span class="code-type">script</span>&gt;
+&lt;/<span class="code-type">body</span>&gt;
+&lt;/<span class="code-type">html</span>&gt;</pre>
+
+        <div class="explanation">
+            <strong>render-mode="ServerPrerendered":</strong>
+            <ul>
+                <li><strong>Server</strong> - renderuj na serwerze, pozniej hydrate przez SignalR</li>
+                <li><strong>ServerPrerendered</strong> - prerenderuj HTML na serwerze (szybszy pierwszy widok)</li>
+                <li><strong>Static</strong> - tylko statyczny HTML, bez interaktywnosci</li>
+            </ul>
+        </div>
+
+        <h3>8.4 App.razor - Router</h3>
+        <p class="file-path">App.razor</p>
+
+        <pre>&lt;<span class="code-type">Router</span> AppAssembly=<span class="code-string">"@typeof(App).Assembly"</span>&gt;
+    &lt;<span class="code-type">Found</span> Context=<span class="code-string">"routeData"</span>&gt;
+        <span class="code-comment">&lt;!-- Znaleziono pasujaca strone --&gt;</span>
+        &lt;<span class="code-type">RouteView</span> RouteData=<span class="code-string">"@routeData"</span> DefaultLayout=<span class="code-string">"@typeof(MainLayout)"</span> /&gt;
+        &lt;<span class="code-type">FocusOnNavigate</span> RouteData=<span class="code-string">"@routeData"</span> Selector=<span class="code-string">"h1"</span> /&gt;
+    &lt;/<span class="code-type">Found</span>&gt;
+    &lt;<span class="code-type">NotFound</span>&gt;
+        <span class="code-comment">&lt;!-- 404 - strona nie znaleziona --&gt;</span>
+        &lt;<span class="code-type">PageTitle</span>&gt;Not found&lt;/<span class="code-type">PageTitle</span>&gt;
+        &lt;<span class="code-type">LayoutView</span> Layout=<span class="code-string">"@typeof(MainLayout)"</span>&gt;
+            &lt;<span class="code-type">p</span>&gt;Sorry, there's nothing at this address.&lt;/<span class="code-type">p</span>&gt;
+        &lt;/<span class="code-type">LayoutView</span>&gt;
+    &lt;/<span class="code-type">NotFound</span>&gt;
+&lt;/<span class="code-type">Router</span>&gt;</pre>
+
+        <div class="explanation">
+            <strong>Blazor Router:</strong>
+            <ul>
+                <li><strong>AppAssembly</strong> - w ktorym assembly szukac stron z @page</li>
+                <li><strong>DefaultLayout</strong> - domyslny layout (MainLayout.razor)</li>
+                <li><strong>RouteView</strong> - renderuje dopasowany komponent</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== DOCKER ==================== -->
+<section id="docker">
+    <h2>9. Docker i DevOps</h2>
+    <div class="content">
+
+        <h3>9.1 Dockerfile (Multi-stage build)</h3>
+        <p class="file-path">src/PetWorld.Web/Dockerfile</p>
+
+        <pre><span class="code-comment"># === STAGE 1: Base image ===</span>
+<span class="code-keyword">FROM</span> mcr.microsoft.com/dotnet/aspnet:7.0 <span class="code-keyword">AS</span> base
+<span class="code-keyword">WORKDIR</span> /app
+<span class="code-keyword">EXPOSE</span> 8080      <span class="code-comment"># Dokumentacja portu</span>
+
+<span class="code-comment"># === STAGE 2: Build ===</span>
+<span class="code-keyword">FROM</span> mcr.microsoft.com/dotnet/sdk:7.0 <span class="code-keyword">AS</span> build
+<span class="code-keyword">WORKDIR</span> /src
+
+<span class="code-comment"># Kopiuj pliki projektow (dla cache warstw Docker)</span>
+<span class="code-keyword">COPY</span> [<span class="code-string">"PetWorld.Domain/PetWorld.Domain.csproj"</span>, <span class="code-string">"PetWorld.Domain/"</span>]
+<span class="code-keyword">COPY</span> [<span class="code-string">"PetWorld.Application/PetWorld.Application.csproj"</span>, <span class="code-string">"PetWorld.Application/"</span>]
+<span class="code-keyword">COPY</span> [<span class="code-string">"PetWorld.Infrastructure/PetWorld.Infrastructure.csproj"</span>, <span class="code-string">"PetWorld.Infrastructure/"</span>]
+<span class="code-keyword">COPY</span> [<span class="code-string">"PetWorld.AI/PetWorld.AI.csproj"</span>, <span class="code-string">"PetWorld.AI/"</span>]
+<span class="code-keyword">COPY</span> [<span class="code-string">"PetWorld.Web/PetWorld.Web.csproj"</span>, <span class="code-string">"PetWorld.Web/"</span>]
+
+<span class="code-comment"># Restore NuGet packages</span>
+<span class="code-keyword">RUN</span> dotnet restore <span class="code-string">"PetWorld.Web/PetWorld.Web.csproj"</span>
+
+<span class="code-comment"># Kopiuj caly kod zrodlowy</span>
+<span class="code-keyword">COPY</span> . .
+
+<span class="code-comment"># Build aplikacji</span>
+<span class="code-keyword">WORKDIR</span> <span class="code-string">"/src/PetWorld.Web"</span>
+<span class="code-keyword">RUN</span> dotnet build <span class="code-string">"PetWorld.Web.csproj"</span> -c Release -o /app/build
+
+<span class="code-comment"># === STAGE 3: Publish ===</span>
+<span class="code-keyword">FROM</span> build <span class="code-keyword">AS</span> publish
+<span class="code-keyword">RUN</span> dotnet publish <span class="code-string">"PetWorld.Web.csproj"</span> -c Release -o /app/publish /p:UseAppHost=false
+
+<span class="code-comment"># === STAGE 4: Final image ===</span>
+<span class="code-keyword">FROM</span> base <span class="code-keyword">AS</span> final
+<span class="code-keyword">WORKDIR</span> /app
+<span class="code-keyword">COPY</span> --from=publish /app/publish .    <span class="code-comment"># Kopiuj tylko opublikowane pliki</span>
+<span class="code-keyword">ENTRYPOINT</span> [<span class="code-string">"dotnet"</span>, <span class="code-string">"PetWorld.Web.dll"</span>]</pre>
+
+        <div class="explanation success">
+            <strong>Multi-stage build - zalety:</strong>
+            <ul>
+                <li>Mniejszy finalny obraz (tylko runtime, bez SDK)</li>
+                <li>Bezpieczenstwo - brak kodu zrodlowego w obrazie</li>
+                <li>Cache warstw - szybsze rebuildy</li>
+            </ul>
+            <p>SDK image: ~700MB, Runtime image: ~200MB</p>
+        </div>
+
+        <h3>9.2 docker-compose.yml</h3>
+        <p class="file-path">docker-compose.yml</p>
+
+        <pre><span class="code-keyword">version:</span> <span class="code-string">'3.8'</span>
+
+<span class="code-keyword">services:</span>
+  <span class="code-comment"># === MySQL Database ===</span>
+  <span class="code-keyword">mysql:</span>
+    <span class="code-keyword">image:</span> mysql:8.0                   <span class="code-comment"># Oficjalny obraz MySQL</span>
+    <span class="code-keyword">container_name:</span> petworld-mysql
+    <span class="code-keyword">environment:</span>
+      <span class="code-keyword">MYSQL_ROOT_PASSWORD:</span> root        <span class="code-comment"># Haslo roota</span>
+      <span class="code-keyword">MYSQL_DATABASE:</span> petworld          <span class="code-comment"># Automatycznie utworz baze</span>
+    <span class="code-keyword">ports:</span>
+      - <span class="code-string">"3306:3306"</span>                    <span class="code-comment"># host:kontener</span>
+    <span class="code-keyword">volumes:</span>
+      - mysql_data:/var/lib/mysql      <span class="code-comment"># Persistentne dane</span>
+    <span class="code-keyword">healthcheck:</span>                       <span class="code-comment"># Sprawdzanie czy baza gotowa</span>
+      <span class="code-keyword">test:</span> [<span class="code-string">"CMD"</span>, <span class="code-string">"mysqladmin"</span>, <span class="code-string">"ping"</span>, <span class="code-string">"-h"</span>, <span class="code-string">"localhost"</span>]
+      <span class="code-keyword">interval:</span> 10s
+      <span class="code-keyword">timeout:</span> 5s
+      <span class="code-keyword">retries:</span> 5
+      <span class="code-keyword">start_period:</span> 30s
+    <span class="code-keyword">networks:</span>
+      - petworld-network
+
+  <span class="code-comment"># === .NET Web Application ===</span>
+  <span class="code-keyword">web:</span>
+    <span class="code-keyword">build:</span>
+      <span class="code-keyword">context:</span> ./src                   <span class="code-comment"># Kontekst buildu</span>
+      <span class="code-keyword">dockerfile:</span> PetWorld.Web/Dockerfile
+    <span class="code-keyword">container_name:</span> petworld-web
+    <span class="code-keyword">ports:</span>
+      - <span class="code-string">"5000:8080"</span>                    <span class="code-comment"># Dostep przez localhost:5000</span>
+    <span class="code-keyword">environment:</span>
+      - <span class="code-keyword">ASPNETCORE_ENVIRONMENT=</span>Production
+      - <span class="code-keyword">ASPNETCORE_URLS=</span>http://+:8080
+      <span class="code-comment"># Connection string - 'mysql' to nazwa serwisu (Docker DNS)</span>
+      - <span class="code-keyword">ConnectionStrings__DefaultConnection=</span>Server=mysql;Port=3306;Database=petworld;User=root;Password=root;
+      - <span class="code-keyword">OpenAI__ApiKey=</span>${OPENAI_API_KEY}  <span class="code-comment"># Z zmiennej srodowiskowej</span>
+    <span class="code-keyword">depends_on:</span>
+      <span class="code-keyword">mysql:</span>
+        <span class="code-keyword">condition:</span> service_healthy     <span class="code-comment"># Czekaj az MySQL healthy</span>
+    <span class="code-keyword">networks:</span>
+      - petworld-network
+
+<span class="code-comment"># === Named Volumes ===</span>
+<span class="code-keyword">volumes:</span>
+  mysql_data:                          <span class="code-comment"># Dane przetrwaja restart kontenerow</span>
+
+<span class="code-comment"># === Networks ===</span>
+<span class="code-keyword">networks:</span>
+  petworld-network:
+    <span class="code-keyword">driver:</span> bridge                    <span class="code-comment"># Domyslny driver sieciowy</span></pre>
+
+        <div class="explanation">
+            <strong>Docker Compose - kluczowe elementy:</strong>
+            <ul>
+                <li><strong>depends_on + condition</strong> - kontrola kolejnosci uruchamiania</li>
+                <li><strong>healthcheck</strong> - Docker sprawdza czy serwis jest gotowy</li>
+                <li><strong>volumes</strong> - dane MySQL przetrwaja <code class="inline-code">docker-compose down</code></li>
+                <li><strong>networks</strong> - kontenery widza sie po nazwach serwisow (mysql, web)</li>
+                <li><strong>${OPENAI_API_KEY}</strong> - zmienna srodowiskowa z hosta</li>
+            </ul>
+        </div>
+
+        <h3>9.3 Komendy Docker</h3>
+        <table>
+            <tr>
+                <th>Komenda</th>
+                <th>Opis</th>
+            </tr>
+            <tr>
+                <td><code>docker-compose up -d</code></td>
+                <td>Uruchom w tle (detached)</td>
+            </tr>
+            <tr>
+                <td><code>docker-compose up -d --build</code></td>
+                <td>Przebuduj obrazy i uruchom</td>
+            </tr>
+            <tr>
+                <td><code>docker-compose down</code></td>
+                <td>Zatrzymaj kontenery</td>
+            </tr>
+            <tr>
+                <td><code>docker-compose logs -f web</code></td>
+                <td>Logi serwisu web (follow)</td>
+            </tr>
+            <tr>
+                <td><code>docker ps</code></td>
+                <td>Lista uruchomionych kontenerow</td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<!-- ==================== DI ==================== -->
+<section id="di">
+    <h2>10. Dependency Injection - szczegoly</h2>
+    <div class="content">
+
+        <h3>10.1 Czasy zycia serwisow (Service Lifetimes)</h3>
+
+        <table>
+            <tr>
+                <th>Lifetime</th>
+                <th>Opis</th>
+                <th>Przyklad</th>
+            </tr>
+            <tr>
+                <td><strong>Singleton</strong></td>
+                <td>Jedna instancja dla calej aplikacji</td>
+                <td>ChatClient (OpenAI)</td>
+            </tr>
+            <tr>
+                <td><strong>Scoped</strong></td>
+                <td>Jedna instancja per HTTP request</td>
+                <td>DbContext, Repository</td>
+            </tr>
+            <tr>
+                <td><strong>Transient</strong></td>
+                <td>Nowa instancja przy kazdym uzyciu</td>
+                <td>Lekkie serwisy bez stanu</td>
+            </tr>
+        </table>
+
+        <pre><span class="code-comment">// Rejestracja serwisow z roznymi lifetime'ami</span>
+services.<span class="code-method">AddSingleton</span>&lt;<span class="code-type">ICacheService</span>, <span class="code-type">MemoryCacheService</span>&gt;();   <span class="code-comment">// Singleton</span>
+services.<span class="code-method">AddScoped</span>&lt;<span class="code-type">IChatHistoryRepository</span>, <span class="code-type">ChatHistoryRepository</span>&gt;(); <span class="code-comment">// Scoped</span>
+services.<span class="code-method">AddTransient</span>&lt;<span class="code-type">IEmailSender</span>, <span class="code-type">SmtpEmailSender</span>&gt;();         <span class="code-comment">// Transient</span></pre>
+
+        <div class="explanation warning">
+            <strong>Uwaga na Captive Dependencies!</strong>
+            <p>Singleton nie moze zalezec od Scoped/Transient - dostanie stala instancje "zamknieta" w singletonie.</p>
+            <ul>
+                <li>Singleton -> Singleton: OK</li>
+                <li>Scoped -> Scoped/Singleton: OK</li>
+                <li>Singleton -> Scoped: BLAD!</li>
+            </ul>
+        </div>
+
+        <h3>10.2 Wstrzykiwanie w Blazor</h3>
+
+        <pre><span class="code-comment">// Sposob 1: @inject w komponencie Razor</span>
+<span class="code-keyword">@inject</span> <span class="code-type">IChatService</span> ChatService
+
+<span class="code-comment">// Sposob 2: [Inject] w kodzie C#</span>
+<span class="code-keyword">@code</span> {
+    [<span class="code-type">Inject</span>]
+    <span class="code-keyword">public</span> <span class="code-type">IChatService</span> ChatService { <span class="code-keyword">get</span>; <span class="code-keyword">set</span>; } = <span class="code-keyword">null</span>!;
+}
+
+<span class="code-comment">// Sposob 3: Przez IServiceProvider (dla opcjonalnych serwisow)</span>
+<span class="code-keyword">@inject</span> <span class="code-type">IServiceProvider</span> ServiceProvider
+
+<span class="code-keyword">@code</span> {
+    <span class="code-keyword">private</span> <span class="code-type">IChatService</span>? _chatService;
+
+    <span class="code-keyword">protected override void</span> <span class="code-method">OnInitialized</span>()
+    {
+        _chatService = ServiceProvider.<span class="code-method">GetService</span>&lt;<span class="code-type">IChatService</span>&gt;(); <span class="code-comment">// Moze byc null</span>
+    }
+}</pre>
+    </div>
+</section>
+
+<!-- ==================== PATTERNS ==================== -->
+<section id="patterns">
+    <h2>11. Wzorce projektowe w projekcie</h2>
+    <div class="content">
+
+        <h3>11.1 Repository Pattern</h3>
+        <p>Abstrakcja dostepu do danych. Warstwa Domain definiuje interfejs, Infrastructure implementuje.</p>
+        <pre><span class="code-comment">// Interfejs (Domain)</span>
+<span class="code-keyword">public interface</span> <span class="code-type">IChatHistoryRepository</span>
+{
+    <span class="code-type">Task</span>&lt;<span class="code-type">ChatHistory</span>&gt; <span class="code-method">AddAsync</span>(<span class="code-type">ChatHistory</span> entity);
+}
+
+<span class="code-comment">// Implementacja (Infrastructure)</span>
+<span class="code-keyword">public class</span> <span class="code-type">ChatHistoryRepository</span> : <span class="code-type">IChatHistoryRepository</span>
+{
+    <span class="code-keyword">private readonly</span> <span class="code-type">PetWorldDbContext</span> _context;
+    <span class="code-comment">// ...</span>
+}</pre>
+
+        <h3>11.2 Dependency Inversion Principle (DIP)</h3>
+        <p>Moduly wyzszego poziomu nie zalezy od nizszego - oba zalezy od abstrakcji.</p>
+        <div class="explanation">
+            ChatService (Application) -> IChatHistoryRepository (Domain) <- ChatHistoryRepository (Infrastructure)
+        </div>
+
+        <h3>11.3 Extension Methods Pattern</h3>
+        <p>Rozszerzanie istniejacych typow bez dziedziczenia.</p>
+        <pre><span class="code-keyword">public static class</span> <span class="code-type">DependencyInjection</span>
+{
+    <span class="code-keyword">public static</span> <span class="code-type">IServiceCollection</span> <span class="code-method">AddInfrastructure</span>(
+        <span class="code-keyword">this</span> <span class="code-type">IServiceCollection</span> services, <span class="code-keyword">string</span> connStr)
+    {
+        <span class="code-comment">// ...</span>
+    }
+}
+
+<span class="code-comment">// Uzycie:</span>
+builder.Services.<span class="code-method">AddInfrastructure</span>(connectionString);</pre>
+
+        <h3>11.4 Writer-Critic Pattern (AI)</h3>
+        <p>Dwa agenci AI wspolpracuja: Writer generuje, Critic waliduje.</p>
+
+        <h3>11.5 DTO Pattern</h3>
+        <p>Przenoszenie danych miedzy warstwami bez eksponowania wewnetrznych struktur.</p>
+    </div>
+</section>
+
+<!-- ==================== Q&A ==================== -->
+<section id="qa">
+    <h2>12. Pytania rekrutacyjne i odpowiedzi</h2>
+    <div class="content">
+
+        <div class="qa-section">
+            <h4>Q: Co to jest Clean Architecture i dlaczego jej uzyles?</h4>
+            <p><strong>A:</strong> Clean Architecture to wzorzec architektoniczny gdzie zaleznosci wskazuja do wewnatrz - od UI do domeny. Uzylem jej bo: (1) latwo testowac kazda warstwe osobno, (2) mozna wymienic baze danych bez zmiany logiki, (3) kod jest bardziej czytelny i latwiejszy w utrzymaniu.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Czym rozni sie Scoped od Singleton w DI?</h4>
+            <p><strong>A:</strong> Singleton - jedna instancja dla calej aplikacji. Scoped - nowa instancja dla kazdego HTTP request (w Blazor Server: per circuit). DbContext musi byc Scoped bo nie jest thread-safe.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Jak dziala Blazor Server?</h4>
+            <p><strong>A:</strong> Kod wykonuje sie na serwerze. Kazda interakcja uzytkownika wysyla event przez SignalR (WebSocket), serwer przetwarza i wysyla roznice DOM (diff) z powrotem. Zaleta: pelny dostep do serwera, szybki start. Wada: wymaga stalego polaczenia.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Co to jest Entity Framework Core?</h4>
+            <p><strong>A:</strong> ORM (Object-Relational Mapper) - mapuje klasy C# na tabele SQL. Pisze LINQ zamiast SQL, EF tlumaczy na zapytania. DbContext reprezentuje sesje z baza, DbSet&lt;T&gt; to tabela.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Co to jest multi-stage build w Docker?</h4>
+            <p><strong>A:</strong> Dockerfile z wieloma FROM. Uzywam SDK do buildu, ale finalny obraz zawiera tylko runtime - jest mniejszy (~200MB vs ~700MB) i bezpieczniejszy (brak kodu zrodlowego).</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Jak dziala Writer-Critic pattern?</h4>
+            <p><strong>A:</strong> Dwa agenci AI: Writer generuje odpowiedz, Critic ja ocenia. Jesli Critic odrzuci, Writer poprawia z feedbackiem. Max 3 iteracje. Poprawia jakosc odpowiedzi AI.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Czym jest async/await w C#?</h4>
+            <p><strong>A:</strong> Programowanie asynchroniczne. <code>async</code> oznacza metode asynchroniczna, <code>await</code> czeka na wynik bez blokowania watku. Watek wraca do puli i moze obslugiwac inne requesty. Metoda zwraca Task&lt;T&gt;.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Co to LINQ?</h4>
+            <p><strong>A:</strong> Language Integrated Query - zapytania w skladni C#. <code>Where()</code>, <code>Select()</code>, <code>OrderBy()</code> etc. Moze dzialac na kolekcjach w pamieci lub byc tlumaczony na SQL (przez EF Core).</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Jak zabezpieczyles aplikacje?</h4>
+            <p><strong>A:</strong> (1) Klucz API w zmiennych srodowiskowych, nie w kodzie. (2) Parametryzowane zapytania przez EF (brak SQL injection). (3) HSTS w produkcji. (4) Walidacja danych wejsciowych.</p>
+        </div>
+
+        <div class="qa-section">
+            <h4>Q: Czemu uzyto Pomelo zamiast oficjalnego providera MySQL?</h4>
+            <p><strong>A:</strong> Microsoft nie dostarcza oficjalnego providera EF Core dla MySQL. Pomelo to najpopularniejszy i najlepiej wspierany provider community dla MySQL/MariaDB.</p>
+        </div>
+
+    </div>
+</section>
+
+</div>
+
+<footer style="background: var(--dark); color: white; padding: 20px; text-align: center; margin-top: 30px;">
+    <p>PetWorld - Dokumentacja Technologii | Wygenerowano automatycznie</p>
+</footer>
+
+</body>
+</html>
