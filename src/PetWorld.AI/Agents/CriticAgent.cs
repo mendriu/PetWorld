@@ -28,7 +28,7 @@ Jeśli odpowiedź wymaga poprawy, ustaw approved=false i podaj konkretny feedbac
         _chatClient = chatClient;
     }
 
-    public async Task<(bool Approved, string Feedback)> EvaluateResponseAsync(string question, string response)
+    public virtual async Task<(bool Approved, string Feedback)> EvaluateResponseAsync(string question, string response)
     {
         var messages = new List<ChatMessage>
         {
