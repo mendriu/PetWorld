@@ -63,7 +63,7 @@ Odpowiadaj po polsku w przyjaznym, ale profesjonalnym tonie.
         _chatClient = chatClient;
     }
 
-    public async Task<string> GenerateResponseAsync(string question, string? feedback = null)
+    public virtual async Task<string> GenerateResponseAsync(string question, string? feedback = null)
     {
         var messages = new List<ChatMessage>
         {
